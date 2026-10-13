@@ -1,83 +1,115 @@
 /**
- * PathForge AI - Interactive Application Logic
- * Prototype v2.0 for Handshake AI Mission
+ * PathForge AI - Interactive Application Logic (v2.0)
+ * Designed to match the 7 reference product screenshots
  */
 
 (function () {
   'use strict';
 
-  // State Management
+  // Application State
   const state = {
+    currentTab: 'start',
     selectedRole: 'ai_ml',
     selectedLevel: 'student',
     timeline: '6_months',
     hoursPerWeek: 15,
-    selectedSkills: new Set(),
-    completedMilestones: new Set(),
+    selectedSkills: new Set(["Python", "NumPy & Pandas", "Linear Algebra & Calculus"]),
+    completedMilestones: new Set(["aiml-1", "aiml-2", "aiml-3", "aiml-4"]), // 4 completed for default demo
+    selectedProjectIndex: 1, // Index 1 is Project 2 of 3 (Enterprise Legal Document Intelligence & RAG Chatbot)
     customSkills: [],
-    theme: localStorage.getItem('pathforge_theme') || 'dark'
+    theme: localStorage.getItem('pathforge_theme') || 'light'
   };
 
   // DOM Elements Cache
   const elements = {
-    // Nav
-    navPresetSelect: document.getElementById('nav-preset-select'),
+    // Navigation
+    navTabsList: document.getElementById('nav-tabs-list'),
+    navRoleDropdown: document.getElementById('nav-role-dropdown'),
     themeToggleBtn: document.getElementById('theme-toggle-btn'),
     themeIcon: document.getElementById('theme-icon'),
-    navStartBtn: document.getElementById('nav-start-btn'),
+    navBuildBtn: document.getElementById('nav-build-btn'),
 
-    // Assessment Form
-    roleSelect: document.getElementById('role-select'),
-    levelSelect: document.getElementById('level-select'),
-    timelineSelect: document.getElementById('timeline-select'),
-    hoursSlider: document.getElementById('hours-slider'),
-    hoursBadge: document.getElementById('hours-badge'),
-    hoursHint: document.getElementById('hours-hint'),
-    skillsContainer: document.getElementById('skills-container'),
-    customSkillInput: document.getElementById('custom-skill-input'),
-    addSkillBtn: document.getElementById('add-skill-btn'),
-    selectedSkillsCount: document.getElementById('selected-skills-count'),
-    requiredSkillsCount: document.getElementById('required-skills-count'),
-    generateRoadmapBtn: document.getElementById('generate-roadmap-btn'),
+    // Tab 1: Start
+    tabStart: document.getElementById('tab-start'),
+    startBuildCta: document.getElementById('start-build-cta'),
+    startExampleCta: document.getElementById('start-example-cta'),
+    startHeroScore: document.getElementById('start-hero-score'),
+    startHeroStatus: document.getElementById('start-hero-status'),
+    startHeroDesc: document.getElementById('start-hero-desc'),
+    startStatSalary: document.getElementById('start-stat-salary'),
+    startStatTime: document.getElementById('start-stat-time'),
+    startStatTimeSub: document.getElementById('start-stat-time-sub'),
+    startStatGaps: document.getElementById('start-stat-gaps'),
 
-    // Results Section
-    resultsSection: document.getElementById('results-section'),
-    reconfigureBtn: document.getElementById('reconfigure-btn'),
-    scoreRingFill: document.getElementById('score-ring-fill'),
-    scoreText: document.getElementById('score-text'),
-    scoreStatusTitle: document.getElementById('score-status-title'),
-    scoreStatusSub: document.getElementById('score-status-sub'),
-    salaryValue: document.getElementById('salary-value'),
-    salarySub: document.getElementById('salary-sub'),
-    targetDateValue: document.getElementById('target-date-value'),
-    pacingDetailsSub: document.getElementById('pacing-details-sub'),
-    gapsCountValue: document.getElementById('gaps-count-value'),
-    gapsCountSub: document.getElementById('gaps-count-sub'),
+    // Tab 2: Profile
+    tabProfile: document.getElementById('tab-profile'),
+    profileRoleCardsGrid: document.getElementById('profile-role-cards-grid'),
+    levelTabsGroup: document.getElementById('level-tabs-group'),
+    timelineOptionsList: document.getElementById('timeline-options-list'),
+    profileHoursText: document.getElementById('profile-hours-text'),
+    profileHoursSlider: document.getElementById('profile-hours-slider'),
+    profileHoursDailyCalc: document.getElementById('profile-hours-daily-calc'),
+    profileCustomSkillInput: document.getElementById('profile-custom-skill-input'),
+    profileAddSkillBtn: document.getElementById('profile-add-skill-btn'),
+    profileSkillsChipsWrapper: document.getElementById('profile-skills-chips-wrapper'),
+    previewRoleTitle: document.getElementById('preview-role-title'),
+    previewScoreVal: document.getElementById('preview-score-val'),
+    previewProgressBar: document.getElementById('preview-progress-bar'),
+    previewMetricSkills: document.getElementById('preview-metric-skills'),
+    previewMetricGaps: document.getElementById('preview-metric-gaps'),
+    previewMetricPace: document.getElementById('preview-metric-pace'),
+    previewMetricFinish: document.getElementById('preview-metric-finish'),
+    profileGenerateBtn: document.getElementById('profile-generate-btn'),
 
-    // Matrix
-    listMastered: document.getElementById('list-mastered'),
-    listMissing: document.getElementById('list-missing'),
-    listBonus: document.getElementById('list-bonus'),
-    countMastered: document.getElementById('count-mastered'),
-    countMissing: document.getElementById('count-missing'),
-    countBonus: document.getElementById('count-bonus'),
+    // Tab 3: Results
+    tabResults: document.getElementById('tab-results'),
+    resultsPageTitle: document.getElementById('results-page-title'),
+    resultsPageSubtitle: document.getElementById('results-page-subtitle'),
+    resultsEditProfileBtn: document.getElementById('results-edit-profile-btn'),
+    resultsScoreNum: document.getElementById('results-score-num'),
+    resultsScoreTier: document.getElementById('results-score-tier'),
+    resultsScoreDesc: document.getElementById('results-score-desc'),
+    routeTrackFill: document.getElementById('route-track-fill'),
+    routeMarkerYou: document.getElementById('route-marker-you'),
+    resultsSalaryVal: document.getElementById('results-salary-val'),
+    resultsSalaryNote: document.getElementById('results-salary-note'),
+    resultsFinishVal: document.getElementById('results-finish-val'),
+    resultsFinishNote: document.getElementById('results-finish-note'),
+    resultsGapsVal: document.getElementById('results-gaps-val'),
+    resultsGapsNote: document.getElementById('results-gaps-note'),
+    matrixCountHave: document.getElementById('matrix-count-have'),
+    matrixListHave: document.getElementById('matrix-list-have'),
+    matrixCountMissing: document.getElementById('matrix-count-missing'),
+    matrixListMissing: document.getElementById('matrix-list-missing'),
+    matrixCountBonus: document.getElementById('matrix-count-bonus'),
+    matrixListBonus: document.getElementById('matrix-list-bonus'),
 
-    // Milestones & Roadmap
-    roadmapProgressFill: document.getElementById('roadmap-progress-fill'),
-    milestonesCounterText: document.getElementById('milestones-counter-text'),
-    roadmapPhasesContainer: document.getElementById('roadmap-phases-container'),
-    projectCardsContainer: document.getElementById('project-cards-container'),
-    scheduleGrid: document.getElementById('schedule-grid'),
-    scheduleSubtitle: document.getElementById('schedule-subtitle'),
+    // Tab 4: Roadmap
+    tabRoadmap: document.getElementById('tab-roadmap'),
+    roadmapSubLead: document.getElementById('roadmap-sub-lead'),
+    roadmapCompletedText: document.getElementById('roadmap-completed-text'),
+    roadmapCompletedBar: document.getElementById('roadmap-completed-bar'),
+    roadmapCompletedPhaseStatus: document.getElementById('roadmap-completed-phase-status'),
+    roadmapPhasesNav: document.getElementById('roadmap-phases-nav'),
+    roadmapPhasesList: document.getElementById('roadmap-phases-list'),
 
-    // Export Actions
-    shareLinkBtn: document.getElementById('share-link-btn'),
-    exportMarkdownBtn: document.getElementById('export-markdown-btn'),
-    printRoadmapBtn: document.getElementById('print-roadmap-btn'),
+    // Tab 5: Projects
+    tabProjects: document.getElementById('tab-projects'),
+    projectsListContainer: document.getElementById('projects-list-container'),
+    aiPromptTextBox: document.getElementById('ai-prompt-text-box'),
+    projectsCopyPromptBtn: document.getElementById('projects-copy-prompt-btn'),
 
-    // Toast & Canvas
-    toastContainer: document.getElementById('toast-container'),
-    confettiCanvas: document.getElementById('confetti-canvas')
+    // Tab 6: Weekly Plan
+    tabWeekly: document.getElementById('tab-weekly'),
+    weeklyPageTitle: document.getElementById('weekly-page-title'),
+    weeklyChartContainer: document.getElementById('weekly-chart-container'),
+    shareUrlSnippet: document.getElementById('share-url-snippet'),
+    weeklyCopyShareBtn: document.getElementById('weekly-copy-share-btn'),
+    weeklyExportMdBtn: document.getElementById('weekly-export-md-btn'),
+    weeklyPrintBtn: document.getElementById('weekly-print-btn'),
+
+    // Notifications
+    toastContainer: document.getElementById('toast-container')
   };
 
   // ==========================================================================
@@ -86,19 +118,26 @@
 
   function init() {
     setupTheme();
-    setupEventListeners();
     loadFromUrlHash();
-    renderSkillChipsForRole();
-    updateSkillCounts();
+    setupEventListeners();
 
-    // If URL provided parameters or previous state exists, auto-render
-    if (window.location.hash.length > 5) {
-      generateRoadmap(false);
+    renderRoleCards();
+    renderSkillChips();
+    refreshCalculations();
+    renderProjectsLab();
+    renderWeeklyChart();
+
+    // Check URL tab parameter or hash
+    if (window.location.hash.includes('tab=')) {
+      const match = window.location.hash.match(/tab=([a-z_-]+)/);
+      if (match && match[1]) {
+        switchTab(match[1]);
+      }
     }
   }
 
   // ==========================================================================
-  // Theme Handling
+  // Theme Management
   // ==========================================================================
 
   function setupTheme() {
@@ -107,7 +146,7 @@
   }
 
   function toggleTheme() {
-    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    state.theme = state.theme === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', state.theme);
     localStorage.setItem('pathforge_theme', state.theme);
     updateThemeIcon();
@@ -116,8 +155,37 @@
 
   function updateThemeIcon() {
     if (elements.themeIcon) {
-      elements.themeIcon.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+      elements.themeIcon.textContent = state.theme === 'light' ? '🌙' : '☀️';
     }
+  }
+
+  // ==========================================================================
+  // Tab Navigation Engine
+  // ==========================================================================
+
+  function switchTab(tabName) {
+    const validTabs = ['start', 'profile', 'results', 'roadmap', 'projects', 'weekly'];
+    if (!validTabs.includes(tabName)) tabName = 'start';
+
+    state.currentTab = tabName;
+
+    // Update Nav Buttons
+    document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+    });
+
+    // Update Tab Sections
+    document.querySelectorAll('.page-section').forEach(sec => {
+      sec.classList.remove('active');
+    });
+
+    const targetSec = document.getElementById(`tab-${tabName}`);
+    if (targetSec) {
+      targetSec.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    updateUrlHash();
   }
 
   // ==========================================================================
@@ -125,543 +193,669 @@
   // ==========================================================================
 
   function setupEventListeners() {
-    // Theme toggle
-    elements.themeToggleBtn.addEventListener('click', toggleTheme);
-
-    // Preset selector in nav
-    elements.navPresetSelect.addEventListener('change', function (e) {
-      if (e.target.value !== '') {
-        applyPreset(parseInt(e.target.value, 10));
+    // Nav Tabs clicks
+    elements.navTabsList.addEventListener('click', (e) => {
+      const btn = e.target.closest('.nav-tab-btn');
+      if (btn) {
+        switchTab(btn.getAttribute('data-tab'));
       }
     });
 
-    // Preset chip buttons in configurator
-    document.querySelectorAll('.preset-chip').forEach(btn => {
-      btn.addEventListener('click', function () {
+    // Theme Toggle
+    elements.themeToggleBtn.addEventListener('click', toggleTheme);
+
+    // Nav CTA: Build my roadmap
+    elements.navBuildBtn.addEventListener('click', () => {
+      switchTab('profile');
+    });
+
+    // Nav Role Dropdown
+    elements.navRoleDropdown.value = state.selectedRole;
+    elements.navRoleDropdown.addEventListener('change', (e) => {
+      setRole(e.target.value);
+    });
+
+    // Start Tab: Build my roadmap CTA
+    elements.startBuildCta.addEventListener('click', () => {
+      switchTab('profile');
+    });
+
+    // Start Tab: See an example CTA
+    elements.startExampleCta.addEventListener('click', () => {
+      applyPreset(0);
+      switchTab('results');
+    });
+
+    // Start Tab: Preset Rows
+    document.querySelectorAll('.start-preset-row').forEach(row => {
+      row.addEventListener('click', function () {
         const idx = parseInt(this.getAttribute('data-preset'), 10);
         applyPreset(idx);
+        switchTab('results');
       });
     });
 
-    // Role selector change
-    elements.roleSelect.addEventListener('change', function () {
-      state.selectedRole = this.value;
-      state.selectedSkills.clear();
-      renderSkillChipsForRole();
-      updateSkillCounts();
+    // Profile: Level Tabs
+    elements.levelTabsGroup.addEventListener('click', (e) => {
+      const btn = e.target.closest('.level-tab-btn');
+      if (btn) {
+        document.querySelectorAll('.level-tab-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        state.selectedLevel = btn.getAttribute('data-level');
+        refreshCalculations();
+      }
     });
 
-    // Level selector
-    elements.levelSelect.addEventListener('change', function () {
-      state.selectedLevel = this.value;
+    // Profile: Timeline Options
+    elements.timelineOptionsList.addEventListener('click', (e) => {
+      const item = e.target.closest('.timeline-option-item');
+      if (item) {
+        document.querySelectorAll('.timeline-option-item').forEach(b => b.classList.remove('selected'));
+        item.classList.add('selected');
+        state.timeline = item.getAttribute('data-timeline');
+        refreshCalculations();
+      }
     });
 
-    // Timeline selector
-    elements.timelineSelect.addEventListener('change', function () {
-      state.timeline = this.value;
-    });
-
-    // Hours slider
-    elements.hoursSlider.addEventListener('input', function () {
+    // Profile: Hours Slider
+    elements.profileHoursSlider.addEventListener('input', function () {
       state.hoursPerWeek = parseInt(this.value, 10);
-      elements.hoursBadge.textContent = `${state.hoursPerWeek} hrs / week`;
+      elements.profileHoursText.innerHTML = `${state.hoursPerWeek} <span style="font-size:1.5rem; font-weight:700;">hours a week</span>`;
       
       const daily = (state.hoursPerWeek / 7).toFixed(1);
-      let desc = '~2.1 hours per day (Ideal for working professionals & students)';
-      if (state.hoursPerWeek <= 10) {
-        desc = `~${daily} hrs/day (Casual pacing, great for busy schedules)`;
-      } else if (state.hoursPerWeek >= 25) {
-        desc = `~${daily} hrs/day (Intensive full-time bootcamp pace)`;
-      } else {
-        desc = `~${daily} hrs/day (Balanced accelerated mastery)`;
-      }
-      elements.hoursHint.textContent = desc;
+      elements.profileHoursDailyCalc.textContent = `About ${daily} hours a day. Balanced pace for most students and working people.`;
+      
+      refreshCalculations();
+      renderWeeklyChart();
     });
 
-    // Add custom skill
-    elements.addSkillBtn.addEventListener('click', addCustomSkill);
-    elements.customSkillInput.addEventListener('keydown', function (e) {
+    // Profile: Add Custom Skill
+    elements.profileAddSkillBtn.addEventListener('click', addCustomSkill);
+    elements.profileCustomSkillInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         addCustomSkill();
       }
     });
 
-    // Generate Roadmap Button
-    elements.generateRoadmapBtn.addEventListener('click', function () {
-      generateRoadmap(true);
+    // Profile: Generate Roadmap CTA
+    elements.profileGenerateBtn.addEventListener('click', () => {
+      refreshCalculations();
+      switchTab('results');
+      showToast('Roadmap generated successfully!', '🎯');
     });
 
-    // Reconfigure / Edit Profile
-    elements.reconfigureBtn.addEventListener('click', function () {
-      elements.assessmentSection = document.getElementById('assessment-section');
-      elements.assessmentSection.scrollIntoView({ behavior: 'smooth' });
+    // Results: Edit Profile CTA
+    elements.resultsEditProfileBtn.addEventListener('click', () => {
+      switchTab('profile');
     });
 
-    // Export & Share
-    elements.shareLinkBtn.addEventListener('click', shareRoadmapLink);
-    elements.exportMarkdownBtn.addEventListener('click', exportMarkdownPlan);
-    elements.printRoadmapBtn.addEventListener('click', function () {
-      window.print();
-    });
+    // Projects: Copy Prompt Button
+    elements.projectsCopyPromptBtn.addEventListener('click', copyAiPrompt);
+
+    // Weekly Plan: Action Buttons
+    elements.weeklyCopyShareBtn.addEventListener('click', copyShareLink);
+    elements.weeklyExportMdBtn.addEventListener('click', exportMarkdownPlan);
+    elements.weeklyPrintBtn.addEventListener('click', () => window.print());
   }
 
   // ==========================================================================
-  // Presets & Skill Chips
+  // Role & Presets Management
   // ==========================================================================
+
+  function setRole(roleId) {
+    if (!CAREER_DATA[roleId]) return;
+    state.selectedRole = roleId;
+    elements.navRoleDropdown.value = roleId;
+
+    // Reset default skills to first 3 skills of this role to match demo state
+    const roleData = CAREER_DATA[roleId];
+    state.selectedSkills = new Set(roleData.requiredSkills.slice(0, 3).map(s => s.name));
+    state.completedMilestones.clear();
+
+    renderRoleCards();
+    renderSkillChips();
+    refreshCalculations();
+    renderProjectsLab();
+    renderWeeklyChart();
+    showToast(`Switched track to ${roleData.title}`, '🚀');
+  }
 
   function applyPreset(index) {
     if (!PRESET_PROFILES[index]) return;
-    const preset = PRESET_PROFILES[index];
+    const p = PRESET_PROFILES[index];
 
-    state.selectedRole = preset.roleId;
-    elements.roleSelect.value = preset.roleId;
+    state.selectedRole = p.roleId;
+    elements.navRoleDropdown.value = p.roleId;
+    state.selectedLevel = p.level;
+    state.hoursPerWeek = p.hours;
+    state.timeline = p.timeline;
+    state.selectedSkills = new Set(p.skills);
 
-    state.selectedLevel = preset.level;
-    elements.levelSelect.value = preset.level;
-
-    state.hoursPerWeek = preset.hours;
-    elements.hoursSlider.value = preset.hours;
-    elements.hoursBadge.textContent = `${preset.hours} hrs / week`;
-
-    state.timeline = preset.timeline;
-    elements.timelineSelect.value = preset.timeline;
-
-    state.selectedSkills = new Set(preset.skills);
-
-    renderSkillChipsForRole();
-    updateSkillCounts();
-    generateRoadmap(true);
-    showToast(`Loaded "${preset.name}" preset!`, '⚡');
-  }
-
-  function renderSkillChipsForRole() {
-    const roleData = CAREER_DATA[state.selectedRole];
-    if (!roleData) return;
-
-    elements.skillsContainer.innerHTML = '';
-
-    // Render standard skills
-    roleData.requiredSkills.forEach(skillObj => {
-      const isSelected = state.selectedSkills.has(skillObj.name);
-      const chip = createSkillChipElement(skillObj.name, skillObj.category, isSelected);
-      elements.skillsContainer.appendChild(chip);
+    // Sync form controls
+    elements.profileHoursSlider.value = p.hours;
+    elements.profileHoursText.innerHTML = `${p.hours} <span style="font-size:1.5rem; font-weight:700;">hours a week</span>`;
+    
+    document.querySelectorAll('.level-tab-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.getAttribute('data-level') === p.level);
     });
 
-    // Render custom skills if any
-    state.customSkills.forEach(customSkill => {
-      const isSelected = state.selectedSkills.has(customSkill);
-      const chip = createSkillChipElement(customSkill, 'Custom', isSelected);
-      elements.skillsContainer.appendChild(chip);
+    document.querySelectorAll('.timeline-option-item').forEach(btn => {
+      btn.classList.toggle('selected', btn.getAttribute('data-timeline') === p.timeline);
     });
 
-    updateSkillCounts();
+    renderRoleCards();
+    renderSkillChips();
+    refreshCalculations();
+    renderProjectsLab();
+    renderWeeklyChart();
+    showToast(`Loaded example: ${p.name}`, '⚡');
   }
 
-  function createSkillChipElement(skillName, category, isSelected) {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = `skill-chip ${isSelected ? 'selected' : ''}`;
-    chip.setAttribute('data-skill', skillName);
-    chip.innerHTML = `
-      <span class="chip-check">✓</span>
-      <span>${skillName}</span>
-      <span style="font-size: 0.65rem; opacity: 0.65; margin-left: 2px;">${category}</span>
+  function renderRoleCards() {
+    const container = elements.profileRoleCardsGrid;
+    container.innerHTML = '';
+
+    Object.keys(CAREER_DATA).forEach(roleKey => {
+      const role = CAREER_DATA[roleKey];
+      const isSelected = roleKey === state.selectedRole;
+
+      const card = document.createElement('div');
+      card.className = `role-card-item ${isSelected ? 'selected' : ''}`;
+      card.setAttribute('data-role', roleKey);
+      card.innerHTML = `
+        <div class="role-card-info">
+          <h4>${role.title}</h4>
+          <div class="role-card-salary">${role.avgSalary} a year</div>
+        </div>
+        <div class="role-radio-circle">
+          ${isSelected ? '✓' : ''}
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        setRole(roleKey);
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  function renderSkillChips() {
+    const container = elements.profileSkillsChipsWrapper;
+    container.innerHTML = '';
+
+    const role = CAREER_DATA[state.selectedRole];
+    if (!role) return;
+
+    // Required skills
+    role.requiredSkills.forEach(s => {
+      const isSelected = state.selectedSkills.has(s.name);
+      const pill = createSkillPill(s.name, s.category, isSelected);
+      container.appendChild(pill);
+    });
+
+    // Custom skills
+    state.customSkills.forEach(customName => {
+      const isSelected = state.selectedSkills.has(customName);
+      const pill = createSkillPill(customName, 'Custom', isSelected);
+      container.appendChild(pill);
+    });
+  }
+
+  function createSkillPill(name, category, isSelected) {
+    const pill = document.createElement('button');
+    pill.type = 'button';
+    pill.className = `skill-tag-pill ${isSelected ? 'selected' : ''}`;
+    pill.innerHTML = `
+      ${isSelected ? '✓ ' : ''}<span>${name}</span>
+      <span class="skill-tag-category">${category}</span>
     `;
 
-    chip.addEventListener('click', function () {
-      toggleSkill(skillName, chip);
+    pill.addEventListener('click', () => {
+      if (state.selectedSkills.has(name)) {
+        state.selectedSkills.delete(name);
+      } else {
+        state.selectedSkills.add(name);
+      }
+      renderSkillChips();
+      refreshCalculations();
     });
 
-    return chip;
-  }
-
-  function toggleSkill(skillName, chipElement) {
-    if (state.selectedSkills.has(skillName)) {
-      state.selectedSkills.delete(skillName);
-      chipElement.classList.remove('selected');
-    } else {
-      state.selectedSkills.add(skillName);
-      chipElement.classList.add('selected');
-    }
-    updateSkillCounts();
+    return pill;
   }
 
   function addCustomSkill() {
-    const text = elements.customSkillInput.value.trim();
-    if (!text) return;
+    const val = elements.profileCustomSkillInput.value.trim();
+    if (!val) return;
 
-    if (!state.customSkills.includes(text)) {
-      state.customSkills.push(text);
-      state.selectedSkills.add(text);
-      elements.customSkillInput.value = '';
-      renderSkillChipsForRole();
-      showToast(`Added custom skill: ${text}`, '💡');
-    } else {
-      showToast(`"${text}" is already listed!`, '⚠️');
+    if (!state.customSkills.includes(val)) {
+      state.customSkills.push(val);
+      state.selectedSkills.add(val);
+      elements.profileCustomSkillInput.value = '';
+      renderSkillChips();
+      refreshCalculations();
+      showToast(`Added custom skill: ${val}`, '💡');
     }
   }
 
-  function updateSkillCounts() {
-    const roleData = CAREER_DATA[state.selectedRole];
-    if (!roleData) return;
-
-    elements.selectedSkillsCount.textContent = state.selectedSkills.size;
-    elements.requiredSkillsCount.textContent = roleData.requiredSkills.length;
-  }
-
   // ==========================================================================
-  // Roadmap Generation & Engine
+  // Core Calculations & Visual Synchronization
   // ==========================================================================
 
-  function generateRoadmap(shouldScroll) {
-    const roleData = CAREER_DATA[state.selectedRole];
-    if (!roleData) return;
+  function refreshCalculations() {
+    const role = CAREER_DATA[state.selectedRole];
+    if (!role) return;
 
-    // 1. Calculate Skill Match Score
-    const totalRequired = roleData.requiredSkills.length;
-    let matchedCount = 0;
-    const masteredList = [];
-    const missingList = [];
-    const bonusList = [];
+    // 1. Math: Total Required vs Mastered
+    const totalRequired = role.requiredSkills.length;
+    const mastered = [];
+    const missing = [];
+    const bonus = [];
 
-    roleData.requiredSkills.forEach(req => {
+    role.requiredSkills.forEach(req => {
       if (state.selectedSkills.has(req.name)) {
-        matchedCount++;
-        masteredList.push(req);
+        mastered.push(req);
       } else {
         if (req.priority === 'Bonus') {
-          bonusList.push(req);
+          bonus.push(req);
         } else {
-          missingList.push(req);
+          missing.push(req);
         }
       }
     });
 
-    // Custom skills count as bonus/mastered
     state.customSkills.forEach(cs => {
       if (state.selectedSkills.has(cs)) {
-        masteredList.push({ name: cs, category: 'Custom', priority: 'Differentiator' });
+        mastered.push({ name: cs, category: 'Custom', priority: 'Differentiator' });
       }
     });
 
-    const matchPercent = Math.min(100, Math.round((matchedCount / totalRequired) * 100));
+    const matchPct = Math.min(100, Math.round((mastered.length / totalRequired) * 100));
+    const gapsCount = missing.length;
 
-    // Update Top Overview Cards
-    updateScoreGauge(matchPercent);
-    elements.salaryValue.textContent = roleData.avgSalary;
-    elements.salarySub = document.getElementById('salary-sub');
-    if (elements.salarySub) {
-      elements.salarySub.textContent = `High Demand: ${roleData.demandLevel}`;
-    }
-
-    elements.gapsCountValue.textContent = `${missingList.length} Skills`;
-    elements.gapsCountSub.textContent = `${masteredList.length} already mastered &bull; ${bonusList.length} bonuses`;
-
-    // Calculate Completion Date
-    const totalBaseWeeks = roleData.phases.reduce((sum, p) => sum + p.estimatedWeeks, 0);
-    // Pace multiplier: 15 hrs standard base
+    // 2. Duration / Weeks calculation (calibrated to 15h standard)
+    const totalBaseWeeks = role.phases.reduce((sum, p) => sum + p.estimatedWeeks, 0);
     const paceMultiplier = 15 / state.hoursPerWeek;
     const estimatedWeeks = Math.max(4, Math.round(totalBaseWeeks * paceMultiplier));
 
     const today = new Date();
-    const targetDate = new Date();
-    targetDate.setDate(today.getDate() + estimatedWeeks * 7);
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    elements.targetDateValue.textContent = `${monthNames[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
-    elements.pacingDetailsSub.textContent = `~${estimatedWeeks} weeks total @ ${state.hoursPerWeek} hrs/week`;
+    const finishDate = new Date();
+    finishDate.setDate(today.getDate() + estimatedWeeks * 7);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const finishDateStr = `${months[finishDate.getMonth()]} ${finishDate.getFullYear()}`;
 
-    // 2. Render Gap Matrix
-    renderGapMatrix(masteredList, missingList, bonusList);
+    // 3. Update Start Hero Card (Tab 1)
+    elements.startHeroScore.textContent = `${matchPct}%`;
+    elements.startHeroDesc.textContent = `${mastered.length} of ${totalRequired} skills match. A clear path is mapped from here.`;
+    elements.startStatSalary.textContent = role.avgSalary.replace(' - ', ' to ');
+    elements.startStatTime.textContent = `${estimatedWeeks} weeks`;
+    elements.startStatTimeSub.textContent = `at ${state.hoursPerWeek} hrs a week`;
+    elements.startStatGaps.textContent = `${gapsCount} gaps`;
 
-    // 3. Render Phases and Milestones
-    renderPhases(roleData.phases, paceMultiplier);
+    // 4. Update Profile Live Preview Card (Tab 2)
+    elements.previewRoleTitle.textContent = role.title;
+    elements.previewScoreVal.textContent = `${matchPct}%`;
+    elements.previewProgressBar.style.width = `${matchPct}%`;
+    elements.previewMetricSkills.textContent = `${mastered.length} of ${totalRequired}`;
+    elements.previewMetricGaps.textContent = `${gapsCount} skills`;
+    elements.previewMetricPace.textContent = `${state.hoursPerWeek} hrs a week`;
+    elements.previewMetricFinish.textContent = `${finishDateStr} (${estimatedWeeks} weeks)`;
 
-    // 4. Render Project Lab
-    renderProjectLab(roleData);
+    // 5. Update Results Page (Tab 3)
+    elements.resultsPageTitle.textContent = `Your route to ${role.title}`;
+    elements.resultsPageSubtitle.textContent = `You have ${mastered.length} of ${totalRequired} required skills. ${gapsCount} gaps stand between you and interview-ready.`;
+    elements.resultsScoreNum.textContent = `${matchPct}%`;
+    elements.routeTrackFill.style.width = `${matchPct}%`;
+    elements.routeMarkerYou.style.left = `${matchPct}%`;
 
-    // 5. Render Study Schedule
-    renderSchedule(state.hoursPerWeek);
+    elements.resultsSalaryVal.textContent = role.avgSalary.replace(' - ', ' to ');
+    elements.resultsFinishVal.textContent = finishDateStr;
+    elements.resultsFinishNote.textContent = `${estimatedWeeks} weeks at ${state.hoursPerWeek} hrs a week`;
+    elements.resultsGapsVal.textContent = `${gapsCount} skills`;
+    elements.resultsGapsNote.textContent = `${mastered.length} mastered, ${bonus.length} bonus skills`;
 
-    // Update overall milestone progress bar
-    updateMilestoneProgress();
-
-    // Reveal results section
-    elements.resultsSection.classList.add('active');
-
-    // Sync state to URL hash
-    updateUrlHash();
-
-    if (shouldScroll) {
-      setTimeout(() => {
-        elements.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    }
-  }
-
-  function updateScoreGauge(percent) {
-    elements.scoreText.textContent = `${percent}%`;
-
-    // SVG stroke dashoffset calculation: circumference is 2 * PI * 35 ~ 220
-    const circumference = 220;
-    const offset = circumference - (percent / 100) * circumference;
-    elements.scoreRingFill.style.strokeDashoffset = offset;
-
-    // Color gradient / stroke changes based on tier
-    if (percent >= 75) {
-      elements.scoreRingFill.style.stroke = 'var(--accent-emerald)';
-      elements.scoreStatusTitle.textContent = 'Job-Ready Baseline 🚀';
-      elements.scoreStatusSub.textContent = 'Minimal gaps remaining. Focus on capstones & system design.';
-    } else if (percent >= 45) {
-      elements.scoreRingFill.style.stroke = 'var(--accent-primary)';
-      elements.scoreStatusTitle.textContent = 'Intermediate Foundation ⚡';
-      elements.scoreStatusSub.textContent = 'Solid core knowledge. Follow the phase sprint below.';
+    // Tier Label
+    if (matchPct >= 70) {
+      elements.resultsScoreTier.textContent = 'Job-ready trajectory 🚀';
+    } else if (matchPct >= 40) {
+      elements.resultsScoreTier.textContent = 'Intermediate foundation ⚡';
     } else {
-      elements.scoreRingFill.style.stroke = 'var(--accent-amber)';
-      elements.scoreStatusTitle.textContent = 'Accelerated Transition 🌱';
-      elements.scoreStatusSub.textContent = 'Clear step-by-step pathway prepared from zero.';
+      elements.resultsScoreTier.textContent = 'Accelerated transition';
     }
+
+    // Render Matrix Columns (Tab 3)
+    renderMatrixColumns(mastered, missing, bonus);
+
+    // 6. Update Roadmap Page (Tab 4)
+    renderRoadmapPhases(role, paceMultiplier);
+
+    // 7. Update Weekly Plan Tab (Tab 6)
+    elements.weeklyPageTitle.textContent = `Your week, ${state.hoursPerWeek} hours`;
+
+    // 8. Update Share Snippet Text
+    const snippet = `pathforge.app/#role=${state.selectedRole}&level=${state.selectedLevel}&hours=${state.hoursPerWeek}`;
+    elements.shareUrlSnippet.textContent = snippet;
+
+    updateUrlHash();
   }
 
-  function renderGapMatrix(mastered, missing, bonus) {
-    elements.countMastered.textContent = mastered.length;
-    elements.countMissing.textContent = missing.length;
-    elements.countBonus.textContent = bonus.length;
+  function renderMatrixColumns(mastered, missing, bonus) {
+    elements.matrixCountHave.textContent = mastered.length;
+    elements.matrixCountMissing.textContent = missing.length;
+    elements.matrixCountBonus.textContent = bonus.length;
 
-    elements.listMastered.innerHTML = mastered.length ? mastered.map(s => `
-      <div class="gap-item">
-        <span>✅ ${s.name}</span>
-        <span class="gap-item-tag tag-mastered">${s.category || 'Skill'}</span>
+    // Col 1: You have
+    elements.matrixListHave.innerHTML = mastered.map(s => `
+      <div class="matrix-item-row">
+        <div class="matrix-item-title">&bull; ${s.name}</div>
+        <span class="matrix-badge badge-black">${s.category || 'Skill'}</span>
       </div>
-    `).join('') : '<div style="font-size:0.8rem; color:var(--text-dim); padding:0.5rem;">None marked yet.</div>';
+    `).join('') || '<div style="font-size:0.8rem; color:var(--text-dim);">No skills selected yet.</div>';
 
-    elements.listMissing.innerHTML = missing.length ? missing.map(s => `
-      <div class="gap-item">
-        <span>🎯 ${s.name}</span>
-        <span class="gap-item-tag tag-missing">${s.priority}</span>
-      </div>
-    `).join('') : '<div style="font-size:0.8rem; color:var(--accent-emerald); padding:0.5rem;">All core requirements met! 🎉</div>';
+    // Col 2: Learn these first
+    elements.matrixListMissing.innerHTML = missing.map(s => {
+      const badgeClass = s.priority === 'Must-Have' ? 'badge-must-have' : 'badge-high';
+      return `
+        <div class="matrix-item-row">
+          <div class="matrix-item-title" style="color: #b45309;">&bull; <span style="color: var(--text-main);">${s.name}</span></div>
+          <span class="matrix-badge ${badgeClass}">${s.priority}</span>
+        </div>
+      `;
+    }).join('') || '<div style="font-size:0.8rem; color:var(--text-dim);">All core skills covered! 🎉</div>';
 
-    elements.listBonus.innerHTML = bonus.length ? bonus.map(s => `
-      <div class="gap-item">
-        <span>🚀 ${s.name}</span>
-        <span class="gap-item-tag tag-bonus">${s.category || 'Differentiator'}</span>
-      </div>
-    `).join('') : '<div style="font-size:0.8rem; color:var(--text-dim); padding:0.5rem;">Core stack prioritized.</div>';
+    // Col 3: Set you apart
+    elements.matrixListBonus.innerHTML = bonus.map(s => {
+      const badgeClass = s.category === 'MLOps' ? 'badge-mlops' : 'badge-advanced';
+      return `
+        <div class="matrix-item-row">
+          <div class="matrix-item-title" style="color: #059669;">&bull; <span style="color: var(--text-main);">${s.name}</span></div>
+          <span class="matrix-badge ${badgeClass}">${s.category || 'Bonus'}</span>
+        </div>
+      `;
+    }).join('') || '<div style="font-size:0.8rem; color:var(--text-dim);">Core requirements prioritized.</div>';
   }
 
-  function renderPhases(phases, paceMultiplier) {
-    elements.roadmapPhasesContainer.innerHTML = '';
+  // ==========================================================================
+  // Roadmap & Milestones Rendering (Tab 4) - Matching Picture 5
+  // ==========================================================================
 
-    phases.forEach(phase => {
+  function renderRoadmapPhases(role, paceMultiplier) {
+    const listContainer = elements.roadmapPhasesList;
+    const navContainer = elements.roadmapPhasesNav;
+    listContainer.innerHTML = '';
+    navContainer.innerHTML = '';
+
+    let totalMilestones = 0;
+    let completedCount = 0;
+
+    role.phases.forEach((phase, idx) => {
+      totalMilestones += phase.milestones.length;
+      const phaseNum = `0${phase.phaseNumber}`;
       const scaledWeeks = Math.max(1, Math.round(phase.estimatedWeeks * paceMultiplier));
 
-      const phaseCard = document.createElement('div');
-      phaseCard.className = 'phase-card';
-      phaseCard.id = `phase-card-${phase.phaseNumber}`;
+      // Calculate how many completed in this phase
+      const phaseCompleted = phase.milestones.filter(m => state.completedMilestones.has(m.id)).length;
+      completedCount += phaseCompleted;
+      const isPhaseComplete = phaseCompleted === phase.milestones.length;
+      const isPhaseInProgress = phaseCompleted > 0 && !isPhaseComplete;
 
-      let milestonesHtml = phase.milestones.map(m => {
+      // Left Nav Link
+      const navLink = document.createElement('div');
+      navLink.className = `roadmap-phase-link ${idx === 1 ? 'active' : ''}`;
+      navLink.innerHTML = `
+        <span>${phase.title.split(' ')[0]}</span>
+        <span>${scaledWeeks} wks</span>
+      `;
+      navLink.addEventListener('click', () => {
+        document.querySelectorAll('.roadmap-phase-link').forEach(l => l.classList.remove('active'));
+        navLink.classList.add('active');
+        const block = document.getElementById(`phase-block-${phase.phaseNumber}`);
+        if (block) block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      navContainer.appendChild(navLink);
+
+      // Status Chip
+      let statusChipHtml = '';
+      if (isPhaseComplete) {
+        statusChipHtml = `<span class="phase-chip chip-status-done">Complete</span>`;
+      } else if (isPhaseInProgress) {
+        statusChipHtml = `<span class="phase-chip chip-status-prog">In progress</span>`;
+      }
+
+      // Milestones Checklist HTML
+      const milestonesHtml = phase.milestones.map(m => {
         const isDone = state.completedMilestones.has(m.id);
         return `
-          <div class="milestone-item ${isDone ? 'completed' : ''}" id="milestone-row-${m.id}" data-mid="${m.id}">
-            <div class="custom-checkbox" role="checkbox" aria-checked="${isDone}" tabindex="0" title="Toggle status">
-              <span class="custom-checkbox-icon">✓</span>
+          <div class="milestone-check-row ${isDone ? 'completed' : ''}" data-mid="${m.id}">
+            <div class="milestone-check-box">
+              ${isDone ? '✓' : ''}
             </div>
-            <div class="milestone-body">
-              <div class="milestone-text">${m.title}</div>
-              <div class="milestone-meta">
-                <span class="milestone-tag">${m.tag}</span>
-                <span class="milestone-resource">📖 ${m.resource}</span>
+            <div class="milestone-content-block">
+              <div class="milestone-name">${m.title}</div>
+              <div class="milestone-meta-row">
+                <span>${m.tag}</span>
+                <span class="milestone-resource-link">📖 ${m.resource}</span>
               </div>
             </div>
           </div>
         `;
       }).join('');
 
-      phaseCard.innerHTML = `
-        <div class="phase-header">
-          <div class="phase-title-group">
-            <div class="phase-badge-num">0${phase.phaseNumber}</div>
-            <div class="phase-titles">
-              <h3>${phase.title}</h3>
-              <span class="phase-duration-badge">⏱️ ~${scaledWeeks} Weeks Duration</span>
-            </div>
-          </div>
-        </div>
-
-        <p class="phase-description">${phase.description}</p>
-
-        <div class="milestones-checklist">
-          ${milestonesHtml}
-        </div>
-
-        <div class="phase-project-card">
-          <div class="phase-project-info">
-            <div class="phase-project-badge">🛠️ Phase Milestone Project &bull; ${phase.miniProject.difficulty}</div>
+      // Phase Project Box
+      const projectCard = `
+        <div class="phase-project-box">
+          <div>
+            <div class="phase-project-lead">&blacktriangleright; Phase project, ${phase.miniProject.difficulty}</div>
             <div class="phase-project-title">${phase.miniProject.title}</div>
-            <div class="phase-project-specs">${phase.miniProject.specs}</div>
+            <div class="phase-project-desc">${phase.miniProject.specs}</div>
           </div>
-          <button type="button" class="btn btn-secondary btn-copy-prompt" data-project-title="${phase.miniProject.title}" data-project-specs="${phase.miniProject.specs}">
-            📋 Copy AI Prompt
+          <button type="button" class="btn-forest copy-phase-prompt-btn" data-title="${phase.miniProject.title}" data-specs="${phase.miniProject.specs}">
+            📋 Copy AI prompt
           </button>
         </div>
       `;
 
-      // Attach milestone checkbox toggle handlers
-      phaseCard.querySelectorAll('.milestone-item').forEach(item => {
-        const mid = item.getAttribute('data-mid');
-        const checkbox = item.querySelector('.custom-checkbox');
+      // Phase Block Element
+      const phaseBlock = document.createElement('div');
+      phaseBlock.className = 'phase-block';
+      phaseBlock.id = `phase-block-${phase.phaseNumber}`;
+      phaseBlock.innerHTML = `
+        <div class="phase-number-giant ${idx === 1 ? 'accent' : ''}">${phaseNum}</div>
+        <div class="phase-content">
+          <div class="phase-title-row">${phase.title}</div>
+          <div class="phase-badges-bar">
+            <span class="phase-chip chip-duration">⏱️ About ${scaledWeeks} weeks</span>
+            ${statusChipHtml}
+          </div>
+          <p class="phase-desc-text">${phase.description}</p>
+          <div class="milestones-checklist-container">
+            ${milestonesHtml}
+          </div>
+          ${projectCard}
+        </div>
+      `;
 
-        const toggleHandler = () => {
+      // Checklist Toggle Events
+      phaseBlock.querySelectorAll('.milestone-check-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const mid = row.getAttribute('data-mid');
           if (state.completedMilestones.has(mid)) {
             state.completedMilestones.delete(mid);
-            item.classList.remove('completed');
-            checkbox.setAttribute('aria-checked', 'false');
           } else {
             state.completedMilestones.add(mid);
-            item.classList.add('completed');
-            checkbox.setAttribute('aria-checked', 'true');
-            triggerConfetti();
-            showToast('Milestone completed! Keep going! 🎯', '🎉');
+            showToast('Milestone checked! Progress updated.', '🎯');
           }
-          saveStateLocally();
-          updateMilestoneProgress();
-        };
-
-        checkbox.addEventListener('click', toggleHandler);
-        checkbox.addEventListener('keydown', (e) => {
-          if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault();
-            toggleHandler();
-          }
+          refreshCalculations();
         });
       });
 
-      // Attach Phase mini-project prompt button
-      phaseCard.querySelector('.btn-copy-prompt').addEventListener('click', function () {
-        const title = this.getAttribute('data-project-title');
-        const specs = this.getAttribute('data-project-specs');
-        copyProjectPromptToClipboard(title, specs);
+      // Copy Prompt Event
+      phaseBlock.querySelector('.copy-phase-prompt-btn').addEventListener('click', (e) => {
+        const title = e.currentTarget.getAttribute('data-title');
+        const specs = e.currentTarget.getAttribute('data-specs');
+        copyProjectSpecificPrompt(title, specs);
       });
 
-      elements.roadmapPhasesContainer.appendChild(phaseCard);
-    });
-  }
-
-  function updateMilestoneProgress() {
-    const roleData = CAREER_DATA[state.selectedRole];
-    if (!roleData) return;
-
-    let totalMilestones = 0;
-    roleData.phases.forEach(p => {
-      totalMilestones += p.milestones.length;
+      listContainer.appendChild(phaseBlock);
     });
 
-    const completedCount = state.completedMilestones.size;
+    // Update Left Sticky Roadmap Card
     const pct = totalMilestones > 0 ? Math.round((completedCount / totalMilestones) * 100) : 0;
-
-    elements.roadmapProgressFill.style.width = `${pct}%`;
-    elements.milestonesCounterText.textContent = `${completedCount} of ${totalMilestones} Milestones Completed (${pct}%)`;
-
-    if (completedCount === totalMilestones && totalMilestones > 0) {
-      triggerConfetti(true);
-      showToast('Incredible! All milestones completed! 🏆', '⭐');
-    }
+    elements.roadmapCompletedText.textContent = `${completedCount} of ${totalMilestones} milestones`;
+    elements.roadmapCompletedBar.style.width = `${pct}%`;
+    elements.roadmapCompletedPhaseStatus.textContent = `${pct}% complete &bull; Phase ${completedCount >= 3 ? '2 in progress' : '1'}`;
   }
 
   // ==========================================================================
-  // Project Lab & Prompts
+  // Portfolio Project Lab (Tab 5) - Matching Picture 1
   // ==========================================================================
 
-  function renderProjectLab(roleData) {
-    elements.projectCardsContainer.innerHTML = '';
+  function renderProjectsLab() {
+    const role = CAREER_DATA[state.selectedRole];
+    if (!role) return;
 
-    roleData.phases.slice(1).forEach((phase, idx) => {
-      const proj = phase.miniProject;
-      let diffClass = 'diff-beginner';
-      if (proj.difficulty.toLowerCase().includes('intermediate')) diffClass = 'diff-intermediate';
-      if (proj.difficulty.toLowerCase().includes('advanced') || proj.difficulty.toLowerCase().includes('cap-stone')) diffClass = 'diff-advanced';
+    const container = elements.projectsListContainer;
+    container.innerHTML = '';
+
+    // We feature 3 portfolio projects from the role's phases
+    const projects = role.phases.slice(1).map((p, idx) => ({
+      index: idx,
+      title: p.miniProject.title,
+      difficulty: p.miniProject.difficulty,
+      specs: p.miniProject.specs,
+      ordinal: idx + 1
+    }));
+
+    projects.forEach((proj, idx) => {
+      const isSelected = idx === state.selectedProjectIndex;
+      let diffBadgeClass = 'badge-diff-intermediate';
+      if (proj.difficulty.toLowerCase().includes('advanced')) diffBadgeClass = 'badge-diff-advanced';
+      if (proj.difficulty.toLowerCase().includes('cap-stone') || proj.difficulty.toLowerCase().includes('capstone')) diffBadgeClass = 'badge-diff-capstone';
 
       const card = document.createElement('div');
-      card.className = 'project-card';
+      card.className = `project-select-card ${isSelected ? 'selected' : ''}`;
       card.innerHTML = `
-        <div>
-          <div class="project-badge-bar">
-            <span class="project-difficulty ${diffClass}">${proj.difficulty}</span>
-            <span style="font-size: 0.75rem; color: var(--text-dim);">Portfolio Capstone 0${idx + 1}</span>
+        <div class="project-card-top-bar">
+          <div class="project-meta-badges">
+            <span class="${diffBadgeClass}">${proj.difficulty}</span>
+            <span class="project-ordinal-label">Portfolio project ${proj.ordinal} of 3</span>
           </div>
-          <h3 class="project-card-title">${proj.title}</h3>
-          <p class="project-card-desc">${proj.specs}</p>
-          <div class="project-tech-stack">
-            <span class="tech-tag">${roleData.title}</span>
-            <span class="tech-tag">Portfolio Ready</span>
-            <span class="tech-tag">GitHub Showcase</span>
-          </div>
+          <button type="button" class="project-card-select-btn">
+            ${isSelected ? 'Selected' : 'Select'}
+          </button>
         </div>
-        <button type="button" class="btn btn-primary btn-copy-prompt" style="margin-top: 1rem;">
-          🤖 Generate Architecture Prompt
-        </button>
+
+        <h3 class="project-item-title">${proj.title}</h3>
+        <p class="project-item-desc">${proj.specs}</p>
+
+        <div class="project-card-tags">
+          <span class="project-tag-chip">${role.title}</span>
+          <span class="project-tag-chip">GitHub showcase</span>
+        </div>
       `;
 
-      card.querySelector('.btn-copy-prompt').addEventListener('click', function () {
-        copyProjectPromptToClipboard(proj.title, proj.specs);
+      card.addEventListener('click', () => {
+        state.selectedProjectIndex = idx;
+        renderProjectsLab();
       });
 
-      elements.projectCardsContainer.appendChild(card);
+      container.appendChild(card);
+    });
+
+    // Update Right AI Prompt Box
+    updateAiPromptBox(projects[state.selectedProjectIndex] || projects[0]);
+  }
+
+  function updateAiPromptBox(activeProject) {
+    const role = CAREER_DATA[state.selectedRole];
+    if (!role || !activeProject) return;
+
+    const promptText = `I am preparing to land a role as a ${role.title}.
+I want to build this portfolio project: "${activeProject.title}".
+Project scope: ${activeProject.specs}
+
+Act as a principal engineer and technical mentor. Help me build this in 4 steps:
+1. System architecture and tech stack: schema, API structure, production stack.
+2. Step-by-step plan: 5 coding milestones with best practices.
+3. Edge cases and production concerns: mistakes juniors make here.
+4. README and resume: 3 STAR-format resume bullets with metrics.
+
+Start with Step 1.`;
+
+    elements.aiPromptTextBox.textContent = promptText;
+  }
+
+  function copyAiPrompt() {
+    const text = elements.aiPromptTextBox.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Copied AI prompt to clipboard! Ready to paste into ChatGPT/Claude', '📋');
+    }).catch(() => {
+      showToast('Prompt ready in text box.', '📋');
     });
   }
 
-  function copyProjectPromptToClipboard(projectTitle, projectSpecs) {
+  function copyProjectSpecificPrompt(title, specs) {
     const role = CAREER_DATA[state.selectedRole].title;
-    const promptText = `I am preparing to land a role as a ${role}. 
-I want to build this portfolio project: "${projectTitle}".
-Project Scope: ${projectSpecs}
+    const promptText = `I am preparing to land a role as a ${role}.
+I want to build this portfolio project: "${title}".
+Project scope: ${specs}
 
-Please act as a Principal Staff Software Engineer & Technical Mentor.
-Help me build this in 4 structured steps:
-1. System Architecture & Tech Stack: Recommend the modern production stack, database schema, and API structure.
-2. Step-by-Step Implementation Plan: Break this into 5 logical coding milestones with best practices.
-3. Edge Cases & Production Considerations: What mistakes do juniors make with this type of project that I should avoid?
-4. GitHub README & Resume Bullet Points: Provide 3 high-impact STAR-format resume bullet points with quantified metrics for this project.
+Act as a principal engineer and technical mentor. Help me build this in 4 steps:
+1. System architecture and tech stack: schema, API structure, production stack.
+2. Step-by-step plan: 5 coding milestones with best practices.
+3. Edge cases and production concerns: mistakes juniors make here.
+4. README and resume: 3 STAR-format resume bullets with metrics.
 
-Start by presenting Step 1 (Architecture & System Design).`;
+Start with Step 1.`;
 
     navigator.clipboard.writeText(promptText).then(() => {
-      showToast('Copied ChatGPT Prompt! Paste into ChatGPT/Claude 🚀', '📋');
+      showToast(`Copied AI Prompt for "${title}"!`, '📋');
     }).catch(() => {
-      showToast('Clipboard access denied, prompt logged to console.', '⚠️');
-      console.log('AI Prompt:\n', promptText);
+      showToast('Copied prompt to clipboard', '📋');
     });
   }
 
   // ==========================================================================
-  // Weekly Study Pacing Schedule
+  // Weekly Plan Chart (Tab 6) - Matching Picture 6
   // ==========================================================================
 
-  function renderSchedule(totalHours) {
-    elements.scheduleSubtitle.textContent = `Calibrated for ${totalHours} hours per week of deliberate practice.`;
-    elements.scheduleGrid.innerHTML = '';
+  function renderWeeklyChart() {
+    const container = elements.weeklyChartContainer;
+    container.innerHTML = '';
 
-    const days = [
-      { name: 'Monday', pct: 0.12, task: 'Theory & Core Concepts Deep-Dive' },
-      { name: 'Tuesday', pct: 0.12, task: 'Hands-on Coding & Documentation Exercises' },
-      { name: 'Wednesday', pct: 0.12, task: 'Algorithmic Drills & Bug Debugging' },
-      { name: 'Thursday', pct: 0.12, task: 'Component / Model Refactoring' },
-      { name: 'Friday', pct: 0.12, task: 'Code Review, Notes & Technical Synthesis' },
-      { name: 'Saturday', pct: 0.22, task: 'Deep Build: Portfolio Capstone Architecture' },
-      { name: 'Sunday', pct: 0.18, task: 'Weekly Retrospective & Next Week Sprint Plan' }
+    const totalHours = state.hoursPerWeek;
+
+    // Daily distribution: Mon-Fri even, Sat deep build (tall gold), Sun retro
+    const scheduleDays = [
+      { name: 'Monday', pct: 0.12, task: 'Theory and core concepts deep-dive', isHighlight: false },
+      { name: 'Tuesday', pct: 0.12, task: 'Hands-on coding and documentation exercises', isHighlight: false },
+      { name: 'Wednesday', pct: 0.12, task: 'Algorithm drills and debugging', isHighlight: false },
+      { name: 'Thursday', pct: 0.12, task: 'Component and model refactoring', isHighlight: false },
+      { name: 'Friday', pct: 0.12, task: 'Code review, notes, and technical synthesis', isHighlight: false },
+      { name: 'Saturday', pct: 0.22, task: 'Deep build: portfolio project architecture', isHighlight: true },
+      { name: 'Sunday', pct: 0.18, task: 'Weekly retrospective and next-week sprint plan', isHighlight: false }
     ];
 
-    days.forEach(day => {
+    scheduleDays.forEach(day => {
       const hours = (totalHours * day.pct).toFixed(1);
+      // Scale height between 100px and 240px
+      const heightPx = Math.round(80 + (parseFloat(hours) / (totalHours * 0.25)) * 140);
+
       const col = document.createElement('div');
-      col.className = 'schedule-day-col';
+      col.className = 'weekday-bar-col';
       col.innerHTML = `
-        <div class="schedule-day-name">${day.name}</div>
-        <div class="schedule-hours-badge">${hours} hrs</div>
-        <div class="schedule-focus-task">${day.task}</div>
+        <div class="weekday-bar-block ${day.isHighlight ? 'highlight' : ''}" style="height: ${heightPx}px;">
+          <div class="bar-hours-val">${hours}</div>
+          <div class="bar-hours-lbl">hours</div>
+        </div>
+        <div class="weekday-meta-info">
+          <div class="weekday-name">${day.name}</div>
+          <div class="weekday-task-desc">${day.task}</div>
+        </div>
       `;
-      elements.scheduleGrid.appendChild(col);
+
+      container.appendChild(col);
     });
   }
 
@@ -669,22 +863,55 @@ Start by presenting Step 1 (Architecture & System Design).`;
   // Export & Share Functions
   // ==========================================================================
 
-  function shareRoadmapLink() {
+  function copyShareLink() {
     updateUrlHash();
     const shareUrl = window.location.href;
-
     navigator.clipboard.writeText(shareUrl).then(() => {
-      showToast('Share link copied to clipboard! Anyone can open this prototype state.', '🔗');
+      showToast('Copied share link to clipboard! Anyone can open your exact plan.', '🔗');
     }).catch(() => {
-      showToast('Copy URL manually from your address bar.', '📋');
+      showToast('Copied link to clipboard.', '🔗');
     });
+  }
+
+  function exportMarkdownPlan() {
+    const role = CAREER_DATA[state.selectedRole];
+    if (!role) return;
+
+    let md = `# PathForge AI: Personalized Career Roadmap\n\n`;
+    md += `**Target Role:** ${role.title}\n`;
+    md += `**Pace:** ${state.hoursPerWeek} hrs/week (${state.timeline})\n`;
+    md += `**Market US Pay (2026):** ${role.avgSalary}\n\n`;
+    md += `---\n\n## 4-Phase Curriculum\n\n`;
+
+    role.phases.forEach(p => {
+      md += `### Phase ${p.phaseNumber}: ${p.title} (~${p.estimatedWeeks} Weeks)\n`;
+      md += `${p.description}\n\n`;
+      p.milestones.forEach(m => {
+        const checked = state.completedMilestones.has(m.id) ? '[x]' : '[ ]';
+        md += `- ${checked} **${m.title}** (Resource: ${m.resource})\n`;
+      });
+      md += `\n**Phase Project:** ${p.miniProject.title}\n`;
+      md += `*Specs:* ${p.miniProject.specs}\n\n`;
+    });
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `PathForge-${state.selectedRole}-Roadmap.md`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showToast('Downloaded Markdown Blueprint!', '💾');
   }
 
   function updateUrlHash() {
     const params = new URLSearchParams();
+    params.set('tab', state.currentTab);
     params.set('role', state.selectedRole);
     params.set('level', state.selectedLevel);
-    params.set('timeline', state.timeline);
     params.set('hours', state.hoursPerWeek.toString());
     params.set('skills', Array.from(state.selectedSkills).join(','));
     window.location.hash = params.toString();
@@ -692,183 +919,46 @@ Start by presenting Step 1 (Architecture & System Design).`;
 
   function loadFromUrlHash() {
     if (!window.location.hash || window.location.hash.length < 3) return;
-
     try {
       const hashStr = window.location.hash.substring(1);
       const params = new URLSearchParams(hashStr);
 
       if (params.has('role') && CAREER_DATA[params.get('role')]) {
         state.selectedRole = params.get('role');
-        elements.roleSelect.value = state.selectedRole;
       }
-
       if (params.has('level')) {
         state.selectedLevel = params.get('level');
-        elements.levelSelect.value = state.selectedLevel;
       }
-
-      if (params.has('timeline')) {
-        state.timeline = params.get('timeline');
-        elements.timelineSelect.value = state.timeline;
-      }
-
       if (params.has('hours')) {
         const h = parseInt(params.get('hours'), 10);
-        if (!isNaN(h) && h >= 5 && h <= 40) {
-          state.hoursPerWeek = h;
-          elements.hoursSlider.value = h;
-          elements.hoursBadge.textContent = `${h} hrs / week`;
-        }
+        if (!isNaN(h) && h >= 5 && h <= 40) state.hoursPerWeek = h;
       }
-
       if (params.has('skills')) {
         const skillsList = params.get('skills').split(',').map(s => s.trim()).filter(Boolean);
         state.selectedSkills = new Set(skillsList);
       }
     } catch (e) {
-      console.warn('Error parsing URL hash:', e);
+      console.warn('URL parsing error:', e);
     }
   }
-
-  function exportMarkdownPlan() {
-    const roleData = CAREER_DATA[state.selectedRole];
-    if (!roleData) return;
-
-    let md = `# PathForge AI: Personalized Career Blueprint\n\n`;
-    md += `**Target Role:** ${roleData.title}\n`;
-    md += `**Experience Level:** ${state.selectedLevel.toUpperCase()}\n`;
-    md += `**Weekly Commitment:** ${state.hoursPerWeek} hrs/week\n`;
-    md += `**Estimated US Market Compensation:** ${roleData.avgSalary}\n`;
-    md += `**Skills Mastered:** ${Array.from(state.selectedSkills).join(', ') || 'None selected'}\n\n`;
-    md += `---\n\n## Phased Learning Trajectory\n\n`;
-
-    roleData.phases.forEach(p => {
-      md += `### Phase ${p.phaseNumber}: ${p.title} (~${p.estimatedWeeks} Weeks)\n`;
-      md += `${p.description}\n\n`;
-      md += `**Milestones:**\n`;
-      p.milestones.forEach(m => {
-        const checked = state.completedMilestones.has(m.id) ? '[x]' : '[ ]';
-        md += `- ${checked} **${m.title}** (Resource: ${m.resource})\n`;
-      });
-      md += `\n**Phase Capstone Project:** ${p.miniProject.title}\n`;
-      md += `*Specs:* ${p.miniProject.specs}\n\n`;
-    });
-
-    md += `---\n*Generated by PathForge AI Prototype | Handshake AI Mission*\n`;
-
-    // Trigger download of markdown file
-    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `PathForge-${state.selectedRole}-Blueprint.md`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-
-    showToast('Downloaded Markdown Blueprint! 📝', '💾');
-  }
-
-  function saveStateLocally() {
-    try {
-      localStorage.setItem('pathforge_completed_milestones', JSON.stringify(Array.from(state.completedMilestones)));
-    } catch (e) {
-      console.warn('LocalStorage save error:', e);
-    }
-  }
-
-  // ==========================================================================
-  // Toast Notifications
-  // ==========================================================================
 
   function showToast(message, icon = '✨') {
     if (!elements.toastContainer) return;
 
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.innerHTML = `
-      <span style="font-size: 1.1rem;">${icon}</span>
-      <span>${message}</span>
-    `;
-
+    toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
     elements.toastContainer.appendChild(toast);
 
     setTimeout(() => {
       toast.style.opacity = '0';
       toast.style.transform = 'translateY(10px)';
-      toast.style.transition = 'all 0.3s ease';
-      setTimeout(() => toast.remove(), 300);
-    }, 3200);
+      toast.style.transition = 'all 0.2s ease';
+      setTimeout(() => toast.remove(), 200);
+    }, 2800);
   }
 
-  // ==========================================================================
-  // Lightweight Confetti Particle Canvas Animation
-  // ==========================================================================
-
-  function triggerConfetti(massive = false) {
-    const canvas = elements.confettiCanvas;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const count = massive ? 120 : 50;
-    const particles = [];
-    const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ec4899'];
-
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: canvas.width / 2 + (Math.random() * 200 - 100),
-        y: canvas.height * 0.4 + (Math.random() * 100 - 50),
-        r: Math.random() * 6 + 4,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 12,
-        vy: (Math.random() - 0.7) * 14 - 3,
-        gravity: 0.4,
-        rotation: Math.random() * 360,
-        rotSpeed: (Math.random() - 0.5) * 8,
-        alpha: 1
-      });
-    }
-
-    let animationFrame;
-    function render() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      let active = false;
-
-      particles.forEach(p => {
-        p.vy += p.gravity;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rotation += p.rotSpeed;
-        p.alpha -= 0.015;
-
-        if (p.alpha > 0) {
-          active = true;
-          ctx.save();
-          ctx.globalAlpha = p.alpha;
-          ctx.translate(p.x, p.y);
-          ctx.rotate((p.rotation * Math.PI) / 180);
-          ctx.fillStyle = p.color;
-          ctx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 1.5);
-          ctx.restore();
-        }
-      });
-
-      if (active) {
-        animationFrame = requestAnimationFrame(render);
-      } else {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        cancelAnimationFrame(animationFrame);
-      }
-    }
-
-    render();
-  }
-
-  // Start app
+  // Run on ready
   document.addEventListener('DOMContentLoaded', init);
 
 })();

@@ -1,379 +1,585 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PathForge AI | AI Career Roadmap &amp; Skill Gap Analyzer</title>
-  <meta name="description" content="Turn your career ambitions into an actionable, day-by-day learning blueprint. Discover your exact skill gaps, salary benchmarks, and tailored project milestones.">
-  <meta name="keywords" content="AI career roadmap, skill gap analyzer, machine learning career, full stack developer path, tech career roadmap, learning blueprint">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="PathForge AI | AI Career Roadmap &amp; Skill Gap Analyzer">
-  <meta property="og:description" content="Interactive skill gap analysis and personalized tech career milestones built for ambitious learners.">
-  <meta property="og:type" content="website">
-
-  <!-- Favicon -->
+  <meta name="description" content="Know what to learn next, and when you'll be ready to apply. Skill benchmarks reflecting 2026 US hiring requirements.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Ambient Background Gradients -->
-  <div class="ambient-mesh" aria-hidden="true"></div>
-  <div class="ambient-grid" aria-hidden="true"></div>
 
-  <!-- Confetti Canvas for milestone celebration -->
-  <canvas id="confetti-canvas"></canvas>
-
-  <!-- Navigation Bar -->
-  <header class="navbar" id="main-navbar">
-    <div class="container nav-container">
-      <a href="#" class="brand-logo" id="brand-logo-link">
+  <!-- Top Navigation Bar (Matching All Screenshots) -->
+  <header class="site-navbar">
+    <div class="container nav-wrapper">
+      <div class="brand-wrapper">
         <div class="brand-icon">
-          <img src="favicon.svg" alt="PathForge AI Logo" width="34" height="34">
+          <img src="favicon.svg" alt="PathForge Logo" width="22" height="22">
         </div>
-        <div>
-          <span class="brand-text">PathForge<span class="gradient-text">.AI</span></span>
-        </div>
-        <span class="brand-badge">Prototype v2.0</span>
-      </a>
+        <span class="brand-title">PathForge</span>
+        <span class="brand-v2-badge">v2</span>
+      </div>
 
-      <div class="nav-actions">
-        <!-- Preset Dropdown for Fast Evaluation -->
-        <div class="preset-selector-wrapper">
-          <span class="preset-label">Quick Demo:</span>
-          <select id="nav-preset-select" class="preset-select" aria-label="Select demo preset">
-            <option value="">-- Choose a Preset Profile --</option>
-            <option value="0">CS Student → AI/ML Engineer</option>
-            <option value="1">Frontend Dev → Full Stack Pro</option>
-            <option value="2">Business Analyst → Data Scientist</option>
-            <option value="3">Junior SysAdmin → Cloud DevOps</option>
+      <!-- Navigation Tabs -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-tabs" id="nav-tabs-list">
+          <li class="nav-tab-item"><button type="button" class="nav-tab-btn active" data-tab="start">Start</button></li>
+          <li class="nav-tab-item"><button type="button" class="nav-tab-btn" data-tab="profile">Profile</button></li>
+          <li class="nav-tab-item"><button type="button" class="nav-tab-btn" data-tab="results">Results</button></li>
+          <li class="nav-tab-item"><button type="button" class="nav-tab-btn" data-tab="roadmap">Roadmap</button></li>
+          <li class="nav-tab-item"><button type="button" class="nav-tab-btn" data-tab="projects">Projects</button></li>
+          <li class="nav-tab-item"><button type="button" class="nav-tab-btn" data-tab="weekly">Weekly plan</button></li>
+        </ul>
+      </nav>
+
+      <!-- Right Action Items -->
+      <div class="nav-actions-right">
+        <div class="nav-example-select-box">
+          <span>Example:&nbsp;</span>
+          <select id="nav-role-dropdown" class="nav-example-select" aria-label="Choose Example Role">
+            <option value="ai_ml">AI/ML engineer</option>
+            <option value="fullstack">Full stack developer</option>
+            <option value="data_science">Data scientist</option>
+            <option value="cloud_devops">Cloud &amp; DevOps</option>
+            <option value="cybersecurity">Cybersecurity</option>
+            <option value="product_mgmt">Product manager</option>
+            <option value="ui_ux">UI/UX designer</option>
           </select>
         </div>
 
-        <!-- Light / Dark Mode Toggle -->
-        <button id="theme-toggle-btn" class="btn-icon" aria-label="Toggle dark/light theme" title="Toggle Theme">
-          <span id="theme-icon">☀️</span>
+        <button type="button" id="theme-toggle-btn" class="nav-theme-btn" aria-label="Toggle dark/light theme" title="Toggle Theme">
+          <span id="theme-icon">🌙</span>
         </button>
 
-        <a href="#assessment-section" class="btn btn-primary" id="nav-start-btn">
-          <span>Build Roadmap</span>
-          <span>→</span>
-        </a>
+        <button type="button" id="nav-build-btn" class="btn-nav-cta">Build my roadmap</button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Container -->
+  <!-- Main View Container -->
   <main class="container">
-    
-    <!-- Hero Section -->
-    <section class="hero-section" id="hero-section">
-      <div class="hero-pill">
-        <span class="hero-pill-dot"></span>
-        <span>Interactive Career Intelligence Engine</span>
+
+    <!-- ======================================================================
+         TAB 1: START (Hero & Overview) - Picture 2
+         ====================================================================== -->
+    <section id="tab-start" class="page-section active">
+      <div class="start-hero-grid">
+        <div class="start-left">
+          <h1 class="page-title">
+            Know what to learn next, and when you'll be ready to apply.
+          </h1>
+          <p class="page-subtitle">
+            Pick a role and tick the skills you already have. PathForge compares you with 2026 hiring requirements and builds a week-by-week plan with projects to ship.
+          </p>
+
+          <div class="start-actions">
+            <button type="button" id="start-build-cta" class="btn-gold">Build my roadmap &rarr;</button>
+            <button type="button" id="start-example-cta" class="btn-outline">See an example</button>
+          </div>
+
+          <div class="start-presets-box">
+            <div class="start-presets-label">Or start from an example</div>
+            <div class="start-preset-list">
+              <button type="button" class="start-preset-row" data-preset="0">
+                <span class="start-preset-name">CS Student to AI/ML Engineer</span>
+                <span class="start-preset-meta">15 hrs a week, 6 months</span>
+              </button>
+              <button type="button" class="start-preset-row" data-preset="1">
+                <span class="start-preset-name">Frontend Dev to Full Stack Pro</span>
+                <span class="start-preset-meta">20 hrs a week, 3 months</span>
+              </button>
+              <button type="button" class="start-preset-row" data-preset="2">
+                <span class="start-preset-name">Business Analyst to Data Scientist</span>
+                <span class="start-preset-meta">12 hrs a week, 6 months</span>
+              </button>
+              <button type="button" class="start-preset-row" data-preset="3">
+                <span class="start-preset-name">Junior SysAdmin to Cloud DevOps</span>
+                <span class="start-preset-meta">18 hrs a week, 6 months</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start Right: Topographic Card -->
+        <div class="start-hero-card topographic-bg">
+          <div class="start-card-top-bar">
+            <span class="badge-example-result">Example result</span>
+          </div>
+
+          <div class="start-card-score" id="start-hero-score">25%</div>
+          <div class="start-card-title" id="start-hero-status">Accelerated transition</div>
+          <div class="start-card-desc" id="start-hero-desc">3 of 12 skills match. A clear path is mapped from here.</div>
+
+          <!-- Topographic Trajectory Path SVG Chart -->
+          <div class="trajectory-svg-container">
+            <svg viewBox="0 0 420 180" fill="none" style="width: 100%; height: auto;">
+              <!-- Background organic contour lines -->
+              <path d="M10 50 C120 30, 240 100, 410 40" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" />
+              <path d="M10 90 C100 60, 260 140, 410 80" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" />
+              <path d="M10 130 C140 110, 280 170, 410 120" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" />
+              
+              <!-- Upward Golden Trajectory Curve -->
+              <path d="M45 130 C120 130, 180 85, 270 70 C320 60, 350 40, 385 30" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" fill="none" />
+              
+              <!-- 4 Milestone Stage Points -->
+              <circle cx="45" cy="130" r="4.5" fill="#f59e0b" />
+              <circle cx="155" cy="98" r="4.5" fill="#f59e0b" />
+              <circle cx="270" cy="70" r="4.5" fill="#f59e0b" />
+              <circle cx="385" cy="30" r="4.5" fill="#f59e0b" />
+
+              <!-- Milestone Stage Text Labels below -->
+              <text x="45" y="156" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="700" text-anchor="middle">Foundations</text>
+              <text x="45" y="169" fill="rgba(255,255,255,0.6)" font-size="9" text-anchor="middle">4 weeks</text>
+
+              <text x="155" y="156" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="700" text-anchor="middle">Core ML</text>
+              <text x="155" y="169" fill="rgba(255,255,255,0.6)" font-size="9" text-anchor="middle">5 weeks</text>
+
+              <text x="270" y="156" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="700" text-anchor="middle">GenAI &amp; RAG</text>
+              <text x="270" y="169" fill="rgba(255,255,255,0.6)" font-size="9" text-anchor="middle">4 weeks</text>
+
+              <text x="375" y="156" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="700" text-anchor="middle">MLOps</text>
+              <text x="375" y="169" fill="rgba(255,255,255,0.6)" font-size="9" text-anchor="middle">3 weeks</text>
+
+              <!-- You are here Pill Marker -->
+              <rect x="20" y="105" width="60" height="18" rx="9" fill="#f59e0b" />
+              <text x="50" y="117" fill="#111827" font-size="8.5" font-weight="800" text-anchor="middle">You are here</text>
+
+              <!-- Interview-ready Label at Top Right -->
+              <text x="385" y="20" fill="#fde047" font-size="9.5" font-weight="800" text-anchor="middle">Interview-ready</text>
+            </svg>
+          </div>
+
+          <div class="start-card-stats">
+            <div>
+              <div class="start-stat-val" id="start-stat-salary">$125k to $185k</div>
+              <div class="start-stat-lbl">US pay range</div>
+            </div>
+            <div>
+              <div class="start-stat-val" id="start-stat-time">16 weeks</div>
+              <div class="start-stat-lbl" id="start-stat-time-sub">at 15 hrs a week</div>
+            </div>
+            <div>
+              <div class="start-stat-val" id="start-stat-gaps">7 gaps</div>
+              <div class="start-stat-lbl">to close</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <h1 class="hero-title">
-        Turn Ambition Into a <span class="gradient-text">Personalized AI Action Plan</span>
-      </h1>
-      <p class="hero-subtitle">
-        Stop guessing what to learn next. Diagnose your exact technical skill gaps against 2026 industry benchmarks, get custom portfolio milestones, and track your path to hired.
-      </p>
+
+      <!-- 3-Step Feature Columns -->
+      <div class="start-steps-section">
+        <div>
+          <div class="step-col-num"><span>1</span> Describe where you are</div>
+          <p class="step-col-desc">Choose a target role, your experience, a timeline, and how many hours you can study each week.</p>
+        </div>
+        <div>
+          <div class="step-col-num"><span>2</span> See your skill gaps</div>
+          <p class="step-col-desc">Every required skill is sorted into what you have, what's missing, and what would set you apart.</p>
+        </div>
+        <div>
+          <div class="step-col-num"><span>3</span> Follow the route</div>
+          <p class="step-col-desc">Work through four phases of milestones and portfolio projects, and tick them off as you go.</p>
+        </div>
+      </div>
+
+      <!-- 4 High-Impact Numbers -->
+      <div class="start-metrics-row">
+        <div>
+          <div class="metric-highlight-num">7</div>
+          <div class="metric-highlight-lbl">career tracks</div>
+        </div>
+        <div>
+          <div class="metric-highlight-num">4</div>
+          <div class="metric-highlight-lbl">phases in each route</div>
+        </div>
+        <div>
+          <div class="metric-highlight-num">12</div>
+          <div class="metric-highlight-lbl">milestones per track</div>
+        </div>
+        <div>
+          <div class="metric-highlight-num">1 link</div>
+          <div class="metric-highlight-lbl">shares your exact plan</div>
+        </div>
+      </div>
     </section>
 
-    <!-- Assessment Configurator Card -->
-    <section class="config-card" id="assessment-section">
-      <div class="config-header">
-        <div class="config-header-text">
-          <h2>Configure Your Career Target</h2>
-          <p>Select your goal, your background, and your existing skills to generate your custom trajectory.</p>
+    <!-- ======================================================================
+         TAB 2: PROFILE (Tell us where you're starting) - Picture 4
+         ====================================================================== -->
+    <section id="tab-profile" class="page-section">
+      <h1 class="page-title">Tell us where you're starting</h1>
+      <p class="page-subtitle">
+        Four choices and a skill check. Your plan updates as you go, and you can change anything later.
+      </p>
+
+      <div class="profile-layout-grid">
+        <div class="profile-form-container">
+          
+          <!-- 1. What role are you aiming for? -->
+          <div class="profile-section-block">
+            <h3>What role are you aiming for?</h3>
+            <p class="profile-section-desc">Seven tracks, each with its own skill list and four-phase route.</p>
+
+            <div class="role-cards-grid" id="profile-role-cards-grid">
+              <!-- Dynamically populated or rendered 7 role cards -->
+            </div>
+          </div>
+
+          <!-- 2. Where are you now? -->
+          <div class="profile-section-block">
+            <h3>Where are you now?</h3>
+            <p class="profile-section-desc">This sets the pace of the plan.</p>
+
+            <div class="level-tabs-group" id="level-tabs-group">
+              <button type="button" class="level-tab-btn selected" data-level="student">
+                <div class="level-tab-title">Student</div>
+                <div class="level-tab-desc">Starting from basics</div>
+              </button>
+              <button type="button" class="level-tab-btn" data-level="junior">
+                <div class="level-tab-title">Junior tech worker</div>
+                <div class="level-tab-desc">1 to 2 years in</div>
+              </button>
+              <button type="button" class="level-tab-btn" data-level="switcher">
+                <div class="level-tab-title">Career switcher</div>
+                <div class="level-tab-desc">Moving into tech</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Pacing Split (Timeline & Hours) -->
+          <div class="pacing-split-grid">
+            <div class="profile-section-block">
+              <h3>How long do you have?</h3>
+              <p class="profile-section-desc">Pick a sprint or a marathon.</p>
+
+              <div class="timeline-options-list" id="timeline-options-list">
+                <button type="button" class="timeline-option-item" data-timeline="3_months">
+                  <div class="timeline-option-title">3 months</div>
+                  <div class="timeline-option-desc">Intensive sprint</div>
+                </button>
+                <button type="button" class="timeline-option-item selected" data-timeline="6_months">
+                  <div class="timeline-option-title">6 months</div>
+                  <div class="timeline-option-desc">Balanced and accelerated</div>
+                </button>
+                <button type="button" class="timeline-option-item" data-timeline="12_months">
+                  <div class="timeline-option-title">12 months</div>
+                  <div class="timeline-option-desc">Comprehensive, in depth</div>
+                </button>
+              </div>
+            </div>
+
+            <div class="profile-section-block hours-control-box">
+              <h3>How many hours a week?</h3>
+              <p class="profile-section-desc">Be honest. A steady pace beats a heroic one.</p>
+
+              <div class="hours-display-big" id="profile-hours-text">15 <span style="font-size:1.5rem; font-weight:700;">hours a week</span></div>
+              <input type="range" id="profile-hours-slider" class="hours-slider-range" min="5" max="40" step="1" value="15">
+              
+              <div class="hours-scale-labels">
+                <span>5</span>
+                <span>20</span>
+                <span>40</span>
+              </div>
+              <div class="hours-daily-calc" id="profile-hours-daily-calc">
+                About 2.1 hours a day. Balanced pace for most students and working people.
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Which skills do you already have? -->
+          <div class="profile-section-block">
+            <h3>Which skills do you already have?</h3>
+            <p class="profile-section-desc">Tick the ones you're confident using. Everything else becomes a gap in your plan.</p>
+
+            <div class="skills-add-bar">
+              <input type="text" id="profile-custom-skill-input" class="skills-input-field" placeholder="Add your own skill, for example GraphQL">
+              <button type="button" id="profile-add-skill-btn" class="btn-forest">Add skill</button>
+            </div>
+
+            <div class="skills-chips-wrapper" id="profile-skills-chips-wrapper">
+              <!-- Dynamically populated skill tags -->
+            </div>
+          </div>
+
         </div>
-        <div class="quick-presets-chips">
-          <span style="font-size: 0.75rem; color: var(--text-dim); align-self: center;">Try Instant:</span>
-          <button type="button" class="preset-chip" data-preset="0">🎓 AI Engineer</button>
-          <button type="button" class="preset-chip" data-preset="1">⚡ Full Stack</button>
-          <button type="button" class="preset-chip" data-preset="2">📊 Data Scientist</button>
-          <button type="button" class="preset-chip" data-preset="3">☁️ Cloud DevOps</button>
+
+        <!-- Profile Right Sticky Live Preview Card -->
+        <div class="profile-preview-card topographic-bg">
+          <div class="preview-badge-lead">Your route so far</div>
+          <div class="preview-role-title" id="preview-role-title">AI &amp; ML engineer</div>
+
+          <div class="preview-score-val" id="preview-score-val">25%</div>
+          <div class="preview-score-lbl">match with 2026 requirements</div>
+
+          <div class="preview-progress-track">
+            <div class="preview-progress-bar" id="preview-progress-bar"></div>
+          </div>
+
+          <div class="preview-metrics-list">
+            <div class="preview-metric-item">
+              <span>Skills selected</span>
+              <span id="preview-metric-skills">3 of 12</span>
+            </div>
+            <div class="preview-metric-item">
+              <span>Gaps to close</span>
+              <span id="preview-metric-gaps">7 skills</span>
+            </div>
+            <div class="preview-metric-item">
+              <span>Pace</span>
+              <span id="preview-metric-pace">15 hrs a week</span>
+            </div>
+            <div class="preview-metric-item">
+              <span>Estimated finish</span>
+              <span id="preview-metric-finish">Feb 2027 (16 weeks)</span>
+            </div>
+          </div>
+
+          <button type="button" id="profile-generate-btn" class="btn-gold btn-generate-full">
+            Generate my roadmap &rarr;
+          </button>
+          <div class="preview-footer-microcopy">Takes under a minute. No sign-up.</div>
         </div>
       </div>
+    </section>
 
-      <div class="config-grid">
-        <!-- Target Role -->
-        <div class="form-group">
-          <label for="role-select" class="form-label">
-            <span>Target Role</span>
-            <span class="form-hint">8 High-Growth Paths</span>
-          </label>
-          <select id="role-select" class="form-select">
-            <option value="ai_ml">🧠 AI &amp; Machine Learning Engineer</option>
-            <option value="fullstack">⚡ Full Stack Software Engineer</option>
-            <option value="data_science">📊 Data Scientist &amp; Analytics Specialist</option>
-            <option value="cloud_devops">☁️ Cloud &amp; DevOps Solutions Architect</option>
-            <option value="cybersecurity">🛡️ Cybersecurity &amp; InfoSec Analyst</option>
-            <option value="product_mgmt">🚀 Technical Product Manager</option>
-            <option value="ui_ux">🎨 Product &amp; UI/UX Systems Designer</option>
-          </select>
+    <!-- ======================================================================
+         TAB 3: RESULTS (Your route to AI & ML engineer) - Picture 3
+         ====================================================================== -->
+    <section id="tab-results" class="page-section">
+      <div class="results-header-bar">
+        <div>
+          <h1 class="page-title" id="results-page-title">Your route to AI &amp; ML engineer</h1>
+          <p class="page-subtitle" id="results-page-subtitle">
+            You have 3 of 12 required skills. Seven gaps stand between you and interview-ready.
+          </p>
         </div>
-
-        <!-- Experience Level -->
-        <div class="form-group">
-          <label for="level-select" class="form-label">
-            <span>Current Experience Level</span>
-            <span class="form-hint">Calibrates Pacing</span>
-          </label>
-          <select id="level-select" class="form-select">
-            <option value="student">🎓 Student / Beginner (Starting from Basics)</option>
-            <option value="junior">💻 Junior Developer / Tech Worker (1-2 Yrs)</option>
-            <option value="switcher">🔄 Career Switcher (Transitioning into Tech)</option>
-          </select>
-        </div>
-
-        <!-- Target Timeline -->
-        <div class="form-group">
-          <label for="timeline-select" class="form-label">
-            <span>Target Timeline</span>
-            <span class="form-hint">Sprint or Marathon</span>
-          </label>
-          <select id="timeline-select" class="form-select">
-            <option value="3_months">⚡ 3 Months (Intensive Bootcamp Sprint)</option>
-            <option value="6_months" selected>🎯 6 Months (Balanced Accelerated)</option>
-            <option value="12_months">📚 12 Months (Comprehensive In-Depth)</option>
-          </select>
-        </div>
-
-        <!-- Weekly Hours Slider -->
-        <div class="form-group slider-container">
-          <div class="slider-header">
-            <label for="hours-slider" class="form-label">Weekly Study Commitment</label>
-            <span id="hours-badge" class="slider-val-badge">15 hrs / week</span>
-          </div>
-          <input type="range" id="hours-slider" class="range-slider" min="5" max="40" step="1" value="15">
-          <span class="form-hint" id="hours-hint">~2.1 hours per day (Ideal for working professionals &amp; students)</span>
-        </div>
-      </div>
-
-      <!-- Skills Checklist -->
-      <div class="skills-selector-section">
-        <div class="skills-selector-header">
-          <div>
-            <h3>Select Skills You Already Know</h3>
-            <span class="form-hint">Click tags you are confident with. We will identify the missing gaps.</span>
-          </div>
-          <div class="add-custom-skill-box">
-            <input type="text" id="custom-skill-input" class="form-input" placeholder="Add custom skill (e.g. GraphQL)..." style="padding: 0.5rem 0.85rem; font-size: 0.85rem;">
-            <button type="button" id="add-skill-btn" class="btn btn-secondary" style="padding: 0.5rem 0.85rem; font-size: 0.85rem;">+ Add</button>
-          </div>
-        </div>
-        <div id="skills-container" class="skill-chips-container">
-          <!-- Dynamically populated skill chips -->
-        </div>
-      </div>
-
-      <div class="config-footer">
-        <div class="config-stats-preview">
-          <div class="config-stat-item">
-            <span>Selected Skills: </span>
-            <strong id="selected-skills-count">0</strong>
-          </div>
-          <div class="config-stat-item">
-            <span>Required for Role: </span>
-            <strong id="required-skills-count">12</strong>
-          </div>
-        </div>
-
-        <button type="button" id="generate-roadmap-btn" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem;">
-          <span>Generate My Roadmap</span>
-          <span style="font-size: 1.15rem;">✨</span>
+        <button type="button" id="results-edit-profile-btn" class="btn-outline">
+          ✏️ Edit profile
         </button>
       </div>
+
+      <!-- Top Summary Split Banner -->
+      <div class="results-summary-split">
+        <div class="results-left-banner topographic-bg">
+          <div>
+            <div class="banner-lead">Match with 2026 hiring requirements</div>
+            <div class="banner-score-row">
+              <span class="banner-score-num" id="results-score-num">25%</span>
+              <span class="banner-score-label" id="results-score-tier">Accelerated transition</span>
+            </div>
+            <div class="banner-desc" id="results-score-desc">Clear step-by-step pathway prepared from zero.</div>
+          </div>
+
+          <!-- Segmented Progress Track with Markers -->
+          <div class="route-track-wrapper">
+            <div class="route-marker-you" id="route-marker-you">You</div>
+            <div class="route-track-bar">
+              <div class="route-track-fill" id="route-track-fill"></div>
+            </div>
+            <div class="route-markers-labels">
+              <span>Foundations</span>
+              <span>Intermediate 45%</span>
+              <span>Job-ready 75%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-right-panel">
+          <div class="panel-row">
+            <div class="panel-row-left">
+              <span class="panel-row-label">Market pay, US 2026</span>
+              <span class="panel-row-val" id="results-salary-val">$125k to $185k</span>
+            </div>
+            <span class="panel-row-note" id="results-salary-note">Very high demand, up 38% a year</span>
+          </div>
+
+          <div class="panel-row">
+            <div class="panel-row-left">
+              <span class="panel-row-label">Target finish</span>
+              <span class="panel-row-val" id="results-finish-val">Feb 2027</span>
+            </div>
+            <span class="panel-row-note" id="results-finish-note">16 weeks at 15 hrs a week</span>
+          </div>
+
+          <div class="panel-row">
+            <div class="panel-row-left">
+              <span class="panel-row-label">Skill gaps</span>
+              <span class="panel-row-val" id="results-gaps-val">7 skills</span>
+            </div>
+            <span class="panel-row-note" id="results-gaps-note">3 mastered, 2 bonus skills</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skill Gap Matrix (3 Columns) -->
+      <div class="matrix-section">
+        <h2>Skill gap matrix</h2>
+        <p class="matrix-desc">What you have, what to learn first, and what would set you apart.</p>
+
+        <div class="matrix-columns-grid">
+          <!-- Col 1: You have -->
+          <div>
+            <div class="matrix-col-header">
+              <span>You have</span>
+              <span id="matrix-count-have">3</span>
+            </div>
+            <div class="matrix-items-list" id="matrix-list-have"></div>
+          </div>
+
+          <!-- Col 2: Learn these first -->
+          <div>
+            <div class="matrix-col-header">
+              <span>Learn these first</span>
+              <span id="matrix-count-missing">7</span>
+            </div>
+            <div class="matrix-items-list" id="matrix-list-missing"></div>
+          </div>
+
+          <!-- Col 3: Set you apart -->
+          <div>
+            <div class="matrix-col-header">
+              <span>Set you apart</span>
+              <span id="matrix-count-bonus">2</span>
+            </div>
+            <div class="matrix-items-list" id="matrix-list-bonus"></div>
+            <div class="matrix-subnote">Bonus skills aren't required, but they show up in stronger applications.</div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Results & Roadmap Section -->
-    <section class="results-section" id="results-section">
-      
-      <!-- Top Overview Metrics Grid -->
-      <div class="overview-metrics-grid">
-        <!-- Match Score Ring -->
-        <div class="metric-card score-card" id="metric-score-card">
-          <div class="score-ring-wrapper">
-            <svg class="score-svg" viewBox="0 0 80 80">
-              <circle class="score-bg-circle" cx="40" cy="40" r="35"></circle>
-              <circle id="score-ring-fill" class="score-fill-circle" cx="40" cy="40" r="35"></circle>
-            </svg>
-            <div class="score-ring-text" id="score-text">0%</div>
+    <!-- ======================================================================
+         TAB 4: ROADMAP (Your roadmap) - Picture 5
+         ====================================================================== -->
+    <section id="tab-roadmap" class="page-section">
+      <div class="roadmap-layout-grid">
+        
+        <!-- Left Sticky Phase Nav & Milestone Counter -->
+        <div class="roadmap-left-sticky">
+          <h2 class="page-title" style="font-size: 2rem;">Your roadmap</h2>
+          <p class="page-subtitle" style="font-size: 0.95rem; margin-bottom: 1.5rem;" id="roadmap-sub-lead">
+            Four phases, 16 weeks. Tick milestones as you finish them.
+          </p>
+
+          <div class="roadmap-milestones-card topographic-bg">
+            <div class="roadmap-card-count" id="roadmap-completed-text">0 of 12 milestones</div>
+            <div class="roadmap-card-track">
+              <div class="roadmap-card-fill" id="roadmap-completed-bar"></div>
+            </div>
+            <div class="roadmap-card-status" id="roadmap-completed-phase-status">0% complete &bull; Starting Phase 1</div>
           </div>
-          <div>
-            <div class="metric-card-label">Industry Match Score</div>
-            <div class="metric-card-value" id="score-status-title">Assessing...</div>
-            <div class="metric-card-sub" id="score-status-sub">Based on current tech requisites</div>
+
+          <div class="roadmap-phases-nav" id="roadmap-phases-nav">
+            <!-- Phase links -->
           </div>
         </div>
 
-        <!-- Market Salary Range -->
-        <div class="metric-card" id="metric-salary-card">
-          <div class="metric-card-header">
-            <span class="metric-card-label">Market Compensation</span>
-            <span class="metric-card-icon">💰</span>
-          </div>
-          <div class="metric-card-value gradient-text" id="salary-value">$125k - $185k</div>
-          <div class="metric-card-sub" id="salary-sub">Median verified 2026 US compensation</div>
+        <!-- Right Phase Blocks List -->
+        <div class="roadmap-phases-list" id="roadmap-phases-list">
+          <!-- Dynamically populated Phase 01, 02, 03, 04 cards -->
         </div>
 
-        <!-- Target Completion Date -->
-        <div class="metric-card" id="metric-pacing-card">
-          <div class="metric-card-header">
-            <span class="metric-card-label">Pacing &amp; Completion Target</span>
-            <span class="metric-card-icon">📅</span>
-          </div>
-          <div class="metric-card-value" id="target-date-value">Nov 2026</div>
-          <div class="metric-card-sub" id="pacing-details-sub">16 weeks total @ 15 hrs/wk</div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TAB 5: PROJECTS (Portfolio project lab) - Picture 1
+         ====================================================================== -->
+    <section id="tab-projects" class="page-section">
+      <h1 class="page-title">Portfolio project lab</h1>
+      <p class="page-subtitle">
+        Build projects that show the skills employers test in technical rounds. Choose one and PathForge writes the prompt to start it with your AI assistant.
+      </p>
+
+      <div class="projects-lab-grid">
+        
+        <!-- Left 3 Project Cards -->
+        <div class="projects-list-col" id="projects-list-container">
+          <!-- Dynamically populated 3 project cards -->
         </div>
 
-        <!-- Priority Gaps Count -->
-        <div class="metric-card" id="metric-gaps-card">
-          <div class="metric-card-header">
-            <span class="metric-card-label">Identified Skill Gaps</span>
-            <span class="metric-card-icon">🎯</span>
+        <!-- Right AI Prompt Preview Dark Card -->
+        <div class="ai-prompt-preview-card topographic-bg">
+          <div class="prompt-top-bar">
+            <span class="prompt-card-title">Your AI prompt</span>
+            <span class="badge-ready-copy">Ready to copy</span>
           </div>
-          <div class="metric-card-value" id="gaps-count-value">7 Skills</div>
-          <div class="metric-card-sub" id="gaps-count-sub">Focused curriculum provided below</div>
+
+          <div class="prompt-text-display" id="ai-prompt-text-box">
+            <!-- Dynamically generated AI prompt text -->
+          </div>
+
+          <div class="prompt-actions-bar">
+            <button type="button" id="projects-copy-prompt-btn" class="btn-gold">
+              📋 Copy prompt
+            </button>
+            <span class="prompt-paste-hint">Paste it into ChatGPT or Claude</span>
+          </div>
         </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TAB 6: WEEKLY PLAN (Your week, 15 hours) - Picture 6
+         ====================================================================== -->
+    <section id="tab-weekly" class="page-section">
+      <h1 class="page-title" id="weekly-page-title">Your week, 15 hours</h1>
+      <p class="page-subtitle">
+        Short weekday sessions and one long build day on Saturday. Move the hours slider in your profile and this plan rescales.
+      </p>
+
+      <!-- 7-Day Bar Chart Visual -->
+      <div class="weekly-chart-container" id="weekly-chart-container">
+        <!-- Dynamically rendered 7 bar columns -->
       </div>
 
-      <!-- Skill Gap Matrix Breakdown -->
-      <div class="gap-matrix-card" id="gap-matrix-card">
-        <div class="gap-matrix-header">
-          <div>
-            <h3>Competency Gap Matrix</h3>
-            <p>Clear audit of what you know vs what companies are actively hiring for.</p>
+      <!-- Ready to Start Banner -->
+      <div class="ready-start-banner topographic-bg">
+        <div>
+          <h2>Ready to start?</h2>
+          <p>
+            Save your plan, send it to a friend or mentor, or print it for your desk. The link rebuilds your exact setup.
+          </p>
+          <div class="share-link-code-box" id="banner-share-url-text">
+            <span>🔗</span>
+            <span id="share-url-snippet">pathforge.app/#role=ai_ml&amp;level=student&amp;hours=15</span>
           </div>
-          <button type="button" id="reconfigure-btn" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">
-            ✏️ Edit Profile
+        </div>
+
+        <div class="banner-actions-stack">
+          <button type="button" id="weekly-copy-share-btn" class="btn-gold btn-banner-action">
+            🔗 Copy share link
           </button>
-        </div>
-
-        <div class="gap-columns-grid">
-          <!-- Mastered Column -->
-          <div class="gap-column">
-            <div class="gap-column-title mastered">
-              <span>✅</span>
-              <span>Skills Mastered (<span id="count-mastered">0</span>)</span>
-            </div>
-            <div id="list-mastered" class="gap-item-list">
-              <!-- Dynamically populated -->
-            </div>
-          </div>
-
-          <!-- Missing Column -->
-          <div class="gap-column">
-            <div class="gap-column-title missing">
-              <span>🔥</span>
-              <span>Priority Gaps to Learn (<span id="count-missing">0</span>)</span>
-            </div>
-            <div id="list-missing" class="gap-item-list">
-              <!-- Dynamically populated -->
-            </div>
-          </div>
-
-          <!-- Bonus / Edge Column -->
-          <div class="gap-column">
-            <div class="gap-column-title bonus">
-              <span>🚀</span>
-              <span>Differentiator Skills (<span id="count-bonus">0</span>)</span>
-            </div>
-            <div id="list-bonus" class="gap-item-list">
-              <!-- Dynamically populated -->
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Roadmap Progress Bar -->
-      <div class="roadmap-progress-bar-card" id="roadmap-progress-card">
-        <div class="roadmap-progress-info">
-          <div>
-            <div class="roadmap-progress-title">Your Active Roadmap Milestones</div>
-            <div class="roadmap-progress-counter" id="milestones-counter-text">0 of 12 Milestones Completed (0%)</div>
-          </div>
-        </div>
-        <div class="progress-track-wrapper">
-          <div class="progress-track">
-            <div id="roadmap-progress-fill" class="progress-bar-fill"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Phase-by-Phase Roadmap -->
-      <div id="roadmap-phases-container" class="roadmap-container">
-        <!-- Dynamically rendered phase cards -->
-      </div>
-
-      <!-- AI Capstone Project Lab -->
-      <div class="project-lab-section" id="project-lab-section">
-        <div class="project-lab-header">
-          <h2>Portfolio Project Lab</h2>
-          <p>Don't just watch videos—build resume-worthy capstones designed to showcase the skills employers test in technical rounds.</p>
-        </div>
-        <div id="project-cards-container" class="project-cards-grid">
-          <!-- Dynamically rendered project cards with ChatGPT prompt generator -->
-        </div>
-      </div>
-
-      <!-- Weekly Study Schedule -->
-      <div class="schedule-card" id="schedule-card">
-        <div class="config-header">
-          <div class="config-header-text">
-            <h2>Recommended Weekly Study Pacing</h2>
-            <p id="schedule-subtitle">Calibrated for 15 hours per week of deliberate practice.</p>
-          </div>
-        </div>
-        <div id="schedule-grid" class="schedule-grid">
-          <!-- Dynamically rendered 7-day schedule breakdown -->
-        </div>
-      </div>
-
-      <!-- Export & Share Banner -->
-      <div class="export-banner" id="export-banner">
-        <div class="export-banner-text">
-          <h3>Ready to Take Action?</h3>
-          <p>Export your custom study blueprint, bookmark your unique share link, or print your action plan for daily accountability.</p>
-        </div>
-        <div class="export-actions">
-          <button type="button" id="share-link-btn" class="btn btn-secondary">
-            <span>🔗 Copy Share Link</span>
+          <button type="button" id="weekly-export-md-btn" class="btn-banner-outline btn-banner-action">
+            📄 Export as Markdown
           </button>
-          <button type="button" id="export-markdown-btn" class="btn btn-secondary">
-            <span>📝 Export Markdown</span>
-          </button>
-          <button type="button" id="print-roadmap-btn" class="btn btn-primary">
-            <span>🖨️ Save as PDF / Print</span>
+          <button type="button" id="weekly-print-btn" class="btn-banner-outline btn-banner-action">
+            🖨️ Save as PDF or print
           </button>
         </div>
       </div>
-
     </section>
 
   </main>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container" aria-live="polite"></div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <p>PathForge AI &bull; Built as a high-impact working prototype for Handshake AI.</p>
-      <div class="footer-mission-badge">
-        <span>🚀</span>
-        <span>Mission: Turn an Idea into a Working Prototype &bull; Handshake AI</span>
-      </div>
+  <!-- Site Footer (Matching Footer in all Screenshots) -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>PathForge AI. Skill benchmarks reflect 2026 US hiring requirements.</span>
+      <span>Prototype for the Handshake AI mission</span>
     </div>
   </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <!-- Scripts -->
   <script src="data.js"></script>
