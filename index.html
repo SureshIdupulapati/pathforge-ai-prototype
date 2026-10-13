@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PathForge AI | AI Career Roadmap &amp; Skill Gap Analyzer</title>
+  <meta name="description" content="Turn your career ambitions into an actionable, day-by-day learning blueprint. Discover your exact skill gaps, salary benchmarks, and tailored project milestones.">
+  <meta name="keywords" content="AI career roadmap, skill gap analyzer, machine learning career, full stack developer path, tech career roadmap, learning blueprint">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="PathForge AI | AI Career Roadmap &amp; Skill Gap Analyzer">
+  <meta property="og:description" content="Interactive skill gap analysis and personalized tech career milestones built for ambitious learners.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient Background Gradients -->
+  <div class="ambient-mesh" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <!-- Confetti Canvas for milestone celebration -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Navigation Bar -->
+  <header class="navbar" id="main-navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo" id="brand-logo-link">
+        <div class="brand-icon">
+          <img src="favicon.svg" alt="PathForge AI Logo" width="34" height="34">
+        </div>
+        <div>
+          <span class="brand-text">PathForge<span class="gradient-text">.AI</span></span>
+        </div>
+        <span class="brand-badge">Prototype v2.0</span>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Preset Dropdown for Fast Evaluation -->
+        <div class="preset-selector-wrapper">
+          <span class="preset-label">Quick Demo:</span>
+          <select id="nav-preset-select" class="preset-select" aria-label="Select demo preset">
+            <option value="">-- Choose a Preset Profile --</option>
+            <option value="0">CS Student → AI/ML Engineer</option>
+            <option value="1">Frontend Dev → Full Stack Pro</option>
+            <option value="2">Business Analyst → Data Scientist</option>
+            <option value="3">Junior SysAdmin → Cloud DevOps</option>
+          </select>
+        </div>
+
+        <!-- Light / Dark Mode Toggle -->
+        <button id="theme-toggle-btn" class="btn-icon" aria-label="Toggle dark/light theme" title="Toggle Theme">
+          <span id="theme-icon">☀️</span>
+        </button>
+
+        <a href="#assessment-section" class="btn btn-primary" id="nav-start-btn">
+          <span>Build Roadmap</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container">
+    
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero-section">
+      <div class="hero-pill">
+        <span class="hero-pill-dot"></span>
+        <span>Interactive Career Intelligence Engine</span>
+      </div>
+      <h1 class="hero-title">
+        Turn Ambition Into a <span class="gradient-text">Personalized AI Action Plan</span>
+      </h1>
+      <p class="hero-subtitle">
+        Stop guessing what to learn next. Diagnose your exact technical skill gaps against 2026 industry benchmarks, get custom portfolio milestones, and track your path to hired.
+      </p>
+    </section>
+
+    <!-- Assessment Configurator Card -->
+    <section class="config-card" id="assessment-section">
+      <div class="config-header">
+        <div class="config-header-text">
+          <h2>Configure Your Career Target</h2>
+          <p>Select your goal, your background, and your existing skills to generate your custom trajectory.</p>
+        </div>
+        <div class="quick-presets-chips">
+          <span style="font-size: 0.75rem; color: var(--text-dim); align-self: center;">Try Instant:</span>
+          <button type="button" class="preset-chip" data-preset="0">🎓 AI Engineer</button>
+          <button type="button" class="preset-chip" data-preset="1">⚡ Full Stack</button>
+          <button type="button" class="preset-chip" data-preset="2">📊 Data Scientist</button>
+          <button type="button" class="preset-chip" data-preset="3">☁️ Cloud DevOps</button>
+        </div>
+      </div>
+
+      <div class="config-grid">
+        <!-- Target Role -->
+        <div class="form-group">
+          <label for="role-select" class="form-label">
+            <span>Target Role</span>
+            <span class="form-hint">8 High-Growth Paths</span>
+          </label>
+          <select id="role-select" class="form-select">
+            <option value="ai_ml">🧠 AI &amp; Machine Learning Engineer</option>
+            <option value="fullstack">⚡ Full Stack Software Engineer</option>
+            <option value="data_science">📊 Data Scientist &amp; Analytics Specialist</option>
+            <option value="cloud_devops">☁️ Cloud &amp; DevOps Solutions Architect</option>
+            <option value="cybersecurity">🛡️ Cybersecurity &amp; InfoSec Analyst</option>
+            <option value="product_mgmt">🚀 Technical Product Manager</option>
+            <option value="ui_ux">🎨 Product &amp; UI/UX Systems Designer</option>
+          </select>
+        </div>
+
+        <!-- Experience Level -->
+        <div class="form-group">
+          <label for="level-select" class="form-label">
+            <span>Current Experience Level</span>
+            <span class="form-hint">Calibrates Pacing</span>
+          </label>
+          <select id="level-select" class="form-select">
+            <option value="student">🎓 Student / Beginner (Starting from Basics)</option>
+            <option value="junior">💻 Junior Developer / Tech Worker (1-2 Yrs)</option>
+            <option value="switcher">🔄 Career Switcher (Transitioning into Tech)</option>
+          </select>
+        </div>
+
+        <!-- Target Timeline -->
+        <div class="form-group">
+          <label for="timeline-select" class="form-label">
+            <span>Target Timeline</span>
+            <span class="form-hint">Sprint or Marathon</span>
+          </label>
+          <select id="timeline-select" class="form-select">
+            <option value="3_months">⚡ 3 Months (Intensive Bootcamp Sprint)</option>
+            <option value="6_months" selected>🎯 6 Months (Balanced Accelerated)</option>
+            <option value="12_months">📚 12 Months (Comprehensive In-Depth)</option>
+          </select>
+        </div>
+
+        <!-- Weekly Hours Slider -->
+        <div class="form-group slider-container">
+          <div class="slider-header">
+            <label for="hours-slider" class="form-label">Weekly Study Commitment</label>
+            <span id="hours-badge" class="slider-val-badge">15 hrs / week</span>
+          </div>
+          <input type="range" id="hours-slider" class="range-slider" min="5" max="40" step="1" value="15">
+          <span class="form-hint" id="hours-hint">~2.1 hours per day (Ideal for working professionals &amp; students)</span>
+        </div>
+      </div>
+
+      <!-- Skills Checklist -->
+      <div class="skills-selector-section">
+        <div class="skills-selector-header">
+          <div>
+            <h3>Select Skills You Already Know</h3>
+            <span class="form-hint">Click tags you are confident with. We will identify the missing gaps.</span>
+          </div>
+          <div class="add-custom-skill-box">
+            <input type="text" id="custom-skill-input" class="form-input" placeholder="Add custom skill (e.g. GraphQL)..." style="padding: 0.5rem 0.85rem; font-size: 0.85rem;">
+            <button type="button" id="add-skill-btn" class="btn btn-secondary" style="padding: 0.5rem 0.85rem; font-size: 0.85rem;">+ Add</button>
+          </div>
+        </div>
+        <div id="skills-container" class="skill-chips-container">
+          <!-- Dynamically populated skill chips -->
+        </div>
+      </div>
+
+      <div class="config-footer">
+        <div class="config-stats-preview">
+          <div class="config-stat-item">
+            <span>Selected Skills: </span>
+            <strong id="selected-skills-count">0</strong>
+          </div>
+          <div class="config-stat-item">
+            <span>Required for Role: </span>
+            <strong id="required-skills-count">12</strong>
+          </div>
+        </div>
+
+        <button type="button" id="generate-roadmap-btn" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem;">
+          <span>Generate My Roadmap</span>
+          <span style="font-size: 1.15rem;">✨</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Results & Roadmap Section -->
+    <section class="results-section" id="results-section">
+      
+      <!-- Top Overview Metrics Grid -->
+      <div class="overview-metrics-grid">
+        <!-- Match Score Ring -->
+        <div class="metric-card score-card" id="metric-score-card">
+          <div class="score-ring-wrapper">
+            <svg class="score-svg" viewBox="0 0 80 80">
+              <circle class="score-bg-circle" cx="40" cy="40" r="35"></circle>
+              <circle id="score-ring-fill" class="score-fill-circle" cx="40" cy="40" r="35"></circle>
+            </svg>
+            <div class="score-ring-text" id="score-text">0%</div>
+          </div>
+          <div>
+            <div class="metric-card-label">Industry Match Score</div>
+            <div class="metric-card-value" id="score-status-title">Assessing...</div>
+            <div class="metric-card-sub" id="score-status-sub">Based on current tech requisites</div>
+          </div>
+        </div>
+
+        <!-- Market Salary Range -->
+        <div class="metric-card" id="metric-salary-card">
+          <div class="metric-card-header">
+            <span class="metric-card-label">Market Compensation</span>
+            <span class="metric-card-icon">💰</span>
+          </div>
+          <div class="metric-card-value gradient-text" id="salary-value">$125k - $185k</div>
+          <div class="metric-card-sub" id="salary-sub">Median verified 2026 US compensation</div>
+        </div>
+
+        <!-- Target Completion Date -->
+        <div class="metric-card" id="metric-pacing-card">
+          <div class="metric-card-header">
+            <span class="metric-card-label">Pacing &amp; Completion Target</span>
+            <span class="metric-card-icon">📅</span>
+          </div>
+          <div class="metric-card-value" id="target-date-value">Nov 2026</div>
+          <div class="metric-card-sub" id="pacing-details-sub">16 weeks total @ 15 hrs/wk</div>
+        </div>
+
+        <!-- Priority Gaps Count -->
+        <div class="metric-card" id="metric-gaps-card">
+          <div class="metric-card-header">
+            <span class="metric-card-label">Identified Skill Gaps</span>
+            <span class="metric-card-icon">🎯</span>
+          </div>
+          <div class="metric-card-value" id="gaps-count-value">7 Skills</div>
+          <div class="metric-card-sub" id="gaps-count-sub">Focused curriculum provided below</div>
+        </div>
+      </div>
+
+      <!-- Skill Gap Matrix Breakdown -->
+      <div class="gap-matrix-card" id="gap-matrix-card">
+        <div class="gap-matrix-header">
+          <div>
+            <h3>Competency Gap Matrix</h3>
+            <p>Clear audit of what you know vs what companies are actively hiring for.</p>
+          </div>
+          <button type="button" id="reconfigure-btn" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">
+            ✏️ Edit Profile
+          </button>
+        </div>
+
+        <div class="gap-columns-grid">
+          <!-- Mastered Column -->
+          <div class="gap-column">
+            <div class="gap-column-title mastered">
+              <span>✅</span>
+              <span>Skills Mastered (<span id="count-mastered">0</span>)</span>
+            </div>
+            <div id="list-mastered" class="gap-item-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Missing Column -->
+          <div class="gap-column">
+            <div class="gap-column-title missing">
+              <span>🔥</span>
+              <span>Priority Gaps to Learn (<span id="count-missing">0</span>)</span>
+            </div>
+            <div id="list-missing" class="gap-item-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Bonus / Edge Column -->
+          <div class="gap-column">
+            <div class="gap-column-title bonus">
+              <span>🚀</span>
+              <span>Differentiator Skills (<span id="count-bonus">0</span>)</span>
+            </div>
+            <div id="list-bonus" class="gap-item-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roadmap Progress Bar -->
+      <div class="roadmap-progress-bar-card" id="roadmap-progress-card">
+        <div class="roadmap-progress-info">
+          <div>
+            <div class="roadmap-progress-title">Your Active Roadmap Milestones</div>
+            <div class="roadmap-progress-counter" id="milestones-counter-text">0 of 12 Milestones Completed (0%)</div>
+          </div>
+        </div>
+        <div class="progress-track-wrapper">
+          <div class="progress-track">
+            <div id="roadmap-progress-fill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase-by-Phase Roadmap -->
+      <div id="roadmap-phases-container" class="roadmap-container">
+        <!-- Dynamically rendered phase cards -->
+      </div>
+
+      <!-- AI Capstone Project Lab -->
+      <div class="project-lab-section" id="project-lab-section">
+        <div class="project-lab-header">
+          <h2>Portfolio Project Lab</h2>
+          <p>Don't just watch videos—build resume-worthy capstones designed to showcase the skills employers test in technical rounds.</p>
+        </div>
+        <div id="project-cards-container" class="project-cards-grid">
+          <!-- Dynamically rendered project cards with ChatGPT prompt generator -->
+        </div>
+      </div>
+
+      <!-- Weekly Study Schedule -->
+      <div class="schedule-card" id="schedule-card">
+        <div class="config-header">
+          <div class="config-header-text">
+            <h2>Recommended Weekly Study Pacing</h2>
+            <p id="schedule-subtitle">Calibrated for 15 hours per week of deliberate practice.</p>
+          </div>
+        </div>
+        <div id="schedule-grid" class="schedule-grid">
+          <!-- Dynamically rendered 7-day schedule breakdown -->
+        </div>
+      </div>
+
+      <!-- Export & Share Banner -->
+      <div class="export-banner" id="export-banner">
+        <div class="export-banner-text">
+          <h3>Ready to Take Action?</h3>
+          <p>Export your custom study blueprint, bookmark your unique share link, or print your action plan for daily accountability.</p>
+        </div>
+        <div class="export-actions">
+          <button type="button" id="share-link-btn" class="btn btn-secondary">
+            <span>🔗 Copy Share Link</span>
+          </button>
+          <button type="button" id="export-markdown-btn" class="btn btn-secondary">
+            <span>📝 Export Markdown</span>
+          </button>
+          <button type="button" id="print-roadmap-btn" class="btn btn-primary">
+            <span>🖨️ Save as PDF / Print</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>PathForge AI &bull; Built as a high-impact working prototype for Handshake AI.</p>
+      <div class="footer-mission-badge">
+        <span>🚀</span>
+        <span>Mission: Turn an Idea into a Working Prototype &bull; Handshake AI</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
